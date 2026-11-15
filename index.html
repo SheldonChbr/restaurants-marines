@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nos tables autour de Marines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Plan : comptoir de bistrot — zinc froid, accent bordeaux, laiton pour les médailles.
+   Layout : en-tête compact, barre de filtres collante, grille de fiches ; classement en liste numérotée. */
+:root{
+  --bg:#eef0ee;
+  --surface:#ffffff;
+  --ink:#1c2220;
+  --muted:#5b6461;
+  --line:#d6dbd8;
+  --accent:#7d1d34;
+  --accent-soft:#f4e6ea;
+  --brass:#a7802f;
+  --good:#2f6b45;
+  --warn:#9a5b12;
+  --bad:#9b2c2c;
+  --display:"Young Serif", Georgia, "Times New Roman", serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r:12px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131615; --surface:#1c201f; --ink:#e9eceb; --muted:#9ba5a1; --line:#2f3533;
+    --accent:#d9748a; --accent-soft:#3a2229; --brass:#d1a957; --good:#6fbf8c; --warn:#e2a35a; --bad:#e07a7a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131615; --surface:#1c201f; --ink:#e9eceb; --muted:#9ba5a1; --line:#2f3533;
+  --accent:#d9748a; --accent-soft:#3a2229; --brass:#d1a957; --good:#6fbf8c; --warn:#e2a35a; --bad:#e07a7a;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+header.top{padding:26px 0 12px}
+header.top h1{font-family:var(--display);font-weight:400;font-size:clamp(26px,4vw,36px);margin:0;text-wrap:balance;letter-spacing:-.01em}
+header.top p{margin:4px 0 0;color:var(--muted);max-width:70ch}
+.tabs{display:flex;gap:6px;margin-top:16px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab .n{font-variant-numeric:tabular-nums;opacity:.7;margin-left:4px}
+.filters{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:16px}
+.frow{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.frow + .frow{margin-top:10px}
+.field{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.field b{color:var(--ink);font-variant-numeric:tabular-nums;min-width:4.5ch;display:inline-block}
+input[type="search"],select,input[type="text"],input[type="number"],input[type="date"],textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+input[type="search"]{min-width:220px;flex:1 1 220px}
+input[type="range"]{accent-color:var(--accent);width:130px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 11px;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.toggle{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;color:var(--ink)}
+.toggle input{accent-color:var(--accent)}
+.meta-line{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin:0 0 12px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 12px;cursor:pointer;font-weight:600;font-size:14px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;padding-bottom:40px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:8px;position:relative}
+.card.tested{border-left:4px solid var(--good)}
+.card.ref{border-left:4px solid var(--brass)}
+.card h3{margin:0;font-family:var(--display);font-weight:400;font-size:20px;line-height:1.2;text-wrap:balance;padding-right:56px}
+.price{position:absolute;top:14px;right:14px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;text-align:right;font-size:14px;line-height:1.2}
+.price small{display:block;color:var(--muted);font-weight:500;font-size:12px}
+.where{color:var(--muted);font-size:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.time{display:inline-flex;align-items:center;gap:4px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
+.tag.pp{background:var(--accent-soft);border-color:transparent;color:var(--accent);font-weight:600}
+.card p{margin:0}
+.amb{font-size:14px}
+.why{font-size:14px;color:var(--muted)}
+.info{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;display:grid;gap:2px}
+.info .dim-no{color:var(--bad)}
+.info .dim-yes{color:var(--good)}
+.soirs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px}
+.soirs .lbl{font-weight:600;color:var(--ink)}
+.soirs .days{display:inline-flex;gap:3px}
+.soirs .day{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:5px;font-size:11px;font-weight:700;border:1px solid var(--line);color:var(--muted)}
+.soirs .day.on{background:var(--good);border-color:var(--good);color:var(--bg)}
+.soirs .day.off{opacity:.45;text-decoration:line-through}
+.soirs .day.unk{border-style:dashed}
+.soirs .unk-txt{font-style:italic}
+.soirs .chk{font-size:11.5px;color:var(--good);font-weight:600}
+.soirs .chk.mine{color:var(--brass)}
+.soirs .edit-h{margin-left:auto;font-size:12px}
+.hgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.hgrid label{display:grid;justify-items:center;gap:4px;font-size:12.5px;font-weight:600;padding:8px 2px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.hgrid label:has(input:checked){border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent)}
+.hgrid input{width:18px;height:18px;accent-color:var(--good)}
+.hhelp{font-size:13px;color:var(--muted);margin:0}
+.sync-btn{margin-left:auto;align-self:center;background:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;color:var(--muted);cursor:pointer}
+.sync-btn.on{color:var(--good);border-color:var(--good)}
+.sync-btn.err{color:var(--bad);border-color:var(--bad)}
+.hrows{display:grid;gap:6px}
+.hrow{display:grid;grid-template-columns:84px 1fr 1fr;gap:8px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}
+.hrow .dname{font-weight:600;text-transform:capitalize;font-size:14px}
+.svc{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:4px 4px}
+.svc .ck{grid-column:1/-1}
+.svc .ck{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:600;min-width:52px;cursor:pointer}
+.svc .ck input{width:17px;height:17px;accent-color:var(--good)}
+.svc input[type="time"]{width:100%;min-width:0;padding:4px 6px;font-size:13px}
+.svc input[type="time"]:disabled{opacity:.35}
+.svc .sep{color:var(--muted)}
+.hdet{font-size:12.5px;margin:2px 0}
+.hdet summary{cursor:pointer;color:var(--accent);font-weight:600}
+.htab{border-collapse:collapse;margin-top:4px;width:100%}
+.htab th,.htab td{text-align:left;padding:2px 6px 2px 0;font-weight:400;font-variant-numeric:tabular-nums}
+.htab thead th{font-weight:600;color:var(--ink)}
+.htab tbody th{text-transform:capitalize;color:var(--ink)}
+.htab tr.closed td{opacity:.6;font-style:italic}
+@media (max-width:560px){.hrow{grid-template-columns:1fr}.hrow .dname{margin-top:4px}}
+.tag.star{color:var(--brass);border-color:var(--brass)}
+.tag.vol{border-style:dashed}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.actions a{font-size:14px;font-weight:600;color:var(--accent);text-decoration:none;padding:7px 4px}
+.actions a:hover{text-decoration:underline}
+.heart{min-width:40px}
+.heart[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--bg);border:1px solid var(--line);width:fit-content}
+.v-coeur{color:var(--accent);border-color:var(--accent)}
+.v-tb{color:var(--good);border-color:var(--good)}
+.v-bien{color:var(--ink)}
+.v-mitige{color:var(--warn);border-color:var(--warn)}
+.v-decus{color:var(--bad);border-color:var(--bad)}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:28px;text-align:center;color:var(--muted)}
+.notice{font-size:13px;padding:8px 12px;border-radius:8px;background:var(--accent-soft);color:var(--ink);margin:0 0 12px}
+/* Classement */
+.rank{display:grid;gap:10px;padding-bottom:40px}
+.rrow{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.pos{font-family:var(--display);font-size:30px;line-height:1;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
+.pos.p1{color:var(--brass)}
+.pos.p2{color:#8a9198}
+.pos.p3{color:#a86b3c}
+.rrow h3{margin:0 0 2px;font-family:var(--display);font-weight:400;font-size:19px}
+.rrow .sub{color:var(--muted);font-size:13.5px}
+.rrow .liked{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.rrow .liked .tag.plus{color:var(--good)}
+.rrow .liked .tag.minus{color:var(--bad)}
+.rrow .com{margin-top:6px;font-size:14px}
+.rrow .side{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.score{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;color:var(--muted)}
+.visits{margin-top:8px;display:grid;gap:4px}
+.visit{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.linkbtn{background:none;border:none;color:var(--accent);cursor:pointer;padding:0;font-size:13px;font-weight:600}
+/* Modale */
+dialog{border:none;border-radius:16px;padding:0;max-width:560px;width:calc(100% - 24px);background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(10,12,11,.55)}
+.mhead{padding:18px 20px 10px;border-bottom:1px solid var(--line)}
+.mhead .kicker{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.mhead h2{margin:2px 0 0;font-family:var(--display);font-weight:400;font-size:22px}
+.prog{height:4px;background:var(--line);border-radius:4px;margin-top:12px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.mbody{padding:18px 20px}
+.mbody h4{margin:0 0 12px;font-size:18px;font-weight:600;text-wrap:balance}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:11px 14px;cursor:pointer;font-weight:500}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt.skip{background:transparent;border-style:dashed;color:var(--muted)}
+.multi{display:flex;flex-wrap:wrap;gap:8px}
+.mfoot{display:flex;justify-content:space-between;gap:8px;padding:12px 20px 18px}
+.form{display:grid;gap:12px}
+.form label{display:grid;gap:4px;font-size:14px;font-weight:600}
+.form label span{font-weight:400;color:var(--muted);font-size:13px}
+.form textarea{min-height:70px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.done{text-align:center;padding:10px 0}
+.done .big{font-family:var(--display);font-size:42px;color:var(--accent);line-height:1}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+footer{color:var(--muted);font-size:12.5px;padding:10px 0 40px;border-top:1px solid var(--line)}
+footer p{margin:4px 0;max-width:90ch}
+@media (max-width:520px){
+  .rrow{grid-template-columns:40px 1fr}
+  .rrow .side{grid-column:1/-1;flex-direction:row;justify-content:flex-start;align-items:center}
+  .two{grid-template-columns:1fr}
+  input[type="range"]{width:110px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Nos tables autour de Marines</h1>
+    <p>Une sélection d'adresses de 15 à 50 min de la maison : bistrots Pas Parisiens, terroir et fait maison, italiens et japonais (pas de buffet asiatique à volonté : les deux exceptions, Hoki Sushi et Sushi Club, sont signalées « À volonté »), tables chic sans se ruiner. Après chaque sortie, on répond au questionnaire et le classement se met à jour tout seul.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-liste" aria-selected="true" data-view="liste">Restaurants <span class="n" id="n-liste"></span></button>
+      <button class="tab" role="tab" id="tab-classement" aria-selected="false" data-view="classement">Notre classement <span class="n" id="n-class"></span></button>
+      <button class="sync-btn" id="sync-btn" data-sync hidden>Synchro : désactivée</button>
+    </div>
+  </header>
+</div>
+
+<section id="view-liste">
+  <div class="filters">
+    <div class="wrap">
+      <div class="frow">
+        <input type="search" id="q" placeholder="Chercher un nom, une ville, un plat…" aria-label="Recherche">
+        <label class="field" for="tmax">Trajet max <b id="tmax-v"></b><input type="range" id="tmax" min="15" max="55" step="5" value="55"></label>
+        <label class="field" for="pmax">Budget max <b id="pmax-v"></b><input type="range" id="pmax" min="20" max="150" step="5" value="150"></label>
+        <label class="field" for="sort">Trier par
+          <select id="sort">
+            <option value="t">Temps de trajet</option>
+            <option value="p">Prix moyen</option>
+            <option value="note">Notre note</option>
+            <option value="n">Nom</option>
+          </select>
+        </label>
+      </div>
+      <div class="frow">
+        <div class="chips" id="styles" aria-label="Styles"></div>
+      </div>
+      <div class="frow">
+        <label class="field" for="zone">Secteur
+          <select id="zone"><option value="">Tous</option></select>
+        </label>
+        <label class="toggle"><input type="checkbox" id="f-todo"> Pas encore testés</label>
+        <label class="toggle"><input type="checkbox" id="f-envie"> Nos envies ♥</label>
+        <label class="field" for="f-soir">Ouvert le soir
+          <select id="f-soir">
+            <option value="">Peu importe</option>
+            <option value="lu">Lundi</option><option value="ma">Mardi</option><option value="me">Mercredi</option>
+            <option value="je">Jeudi</option><option value="ve">Vendredi</option><option value="sa">Samedi</option><option value="di">Dimanche</option>
+          </select>
+        </label>
+        <label class="toggle"><input type="checkbox" id="f-unk"> + horaires à vérifier</label>
+        <label class="toggle"><input type="checkbox" id="f-vol"> Sans à volonté</label>
+        <button class="btn ghost" id="reset">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div id="notice"></div>
+    <div class="meta-line"><span id="count"></span><button class="btn" id="add-btn">+ Ajouter un restaurant</button></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="view-classement" hidden>
+  <div class="wrap">
+    <div class="meta-line" style="margin-top:6px">
+      <span id="rank-count"></span>
+      <label class="toggle"><input type="checkbox" id="show-scores"> Afficher les scores</label>
+    </div>
+    <div class="rank" id="rank"></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <p>Temps de trajet estimés en voiture depuis Marines, hors bouchons : le lien « Trajet » ouvre l'itinéraire réel. Prix moyen estimé par personne, hors boissons, d'après les guides (Gault&amp;Millau, Michelin) et les avis en ligne de 2025-2026.</p>
+    <p>Horaires et prix vérifiés le 15 novembre 2026 (guides Michelin et Gault&amp;Millau, PagesJaunes, offices de tourisme, sites de réservation). Pastille verte = soir ouvert, barrée = fermé, pointillés = non confirmé. « ✓ vérifié » = horaires recoupés sur une source récente. Ils changent souvent, surtout le dimanche soir et en hiver : on appelle avant d'y aller.</p>
+  </footer>
+</div>
+
+<dialog id="dlg" aria-labelledby="dlg-title"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* ---------- Données ---------- */
+const STYLES = {
+  PP:"Pas Parisiens", BIS:"Bistronomie", TER:"Terroir & fait maison", CHIC:"Chic", BR:"Branché / cocktails",
+  EAU:"Bord de l'eau", GAS:"Gastronomique", BRA:"Brasserie", ITA:"Italien", JAP:"Japonais", MON:"Cuisine du monde"
+};
+// t = minutes depuis Marines (estimation), p = prix moyen €/pers hors boissons, soir (budget du dîner)
+// soirs = soirs d'ouverture confirmés (lu ma me je ve sa di), null = inconnus ; ps = autres soirs non confirmés
+// hv = horaires recoupés sur une source récente (Michelin, PagesJaunes, office de tourisme, site de résa…) ; vol = formule à volonté ; star = étoiles Michelin
+const PMAX=150;
+const ALL7=["lu","ma","me","je","ve","sa","di"], MA_SA=["ma","me","je","ve","sa"];
+const R = [
+  // Référence et déjà aimés
+  {id:"le-loft", n:"Le Loft", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:36, s:["BRA","BR"], ref:true,
+   a:"Café-brasserie nouvelle génération dans un ancien hôtel particulier, grande terrasse ombragée.",
+   w:"Votre référence. Notez-le en premier pour étalonner le classement.", g:"16 Grande Rue · buffet du soir 35,90 € (32,90 € en prépaiement) · brunch le dimanche",
+   soirs:["ma","me","je","ve","sa"], ps:true, h:"Ouvert du mardi au dimanche, fermé le lundi. Dimanche soir à confirmer."},
+  {id:"hoki-sushi", n:"Hoki Sushi", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:22, s:["JAP"], liked:true, vol:true,
+   a:"Japonais de quartier, sushis, sashimis, brochettes.",
+   w:"Déjà aimé. À noter pour le comparer aux autres japonais de la liste.", g:"18 rue de l'Hautil · à volonté midi, soir et week-end · formules dès 12 € environ",
+   soirs:null, h:"Ouvert le soir et le week-end (d'après vous). Jour de fermeture à vérifier."},
+  {id:"la-capanna", n:"La Capanna", v:"Éragny-sur-Oise", z:"Cergy-Pontoise", t:25, p:25, s:["ITA"], liked:true,
+   a:"Décor italien chaleureux, patrons adorables d'après les avis.",
+   w:"Déjà aimé. Pizzas pâte fine, pâtes, bon rapport qualité/prix (4,1/5 sur 730 avis).", g:"Rue du Bas Noyer · 20 à 30 €",
+   soirs:null, h:"Service 11h45-14h45 et 18h-22h. Jour de fermeture à vérifier."},
+
+  // Dans l'esprit de Hoki Sushi et La Capanna
+  {id:"o-chalet", n:"Ô Chalet", v:"Éragny-sur-Oise", z:"Cergy-Pontoise", t:25, p:35, s:["EAU","TER"],
+   a:"Presque les pieds dans l'Oise, baies vitrées. L'hiver : fondue, raclette, tartiflette. L'été : terrasse, salades, friture.",
+   w:"Propriétaires adorables : 9,9/10 sur plus de 400 avis.", g:"55 bis chemin de Halage · budget moyen 30 à 40 € · formule midi en semaine 15 €",
+   soirs:["me","je","ve","sa"], hv:true, h:"Mer.-sam. midi et 19h30-22h · dimanche midi · fermé lun.-mar. et en août."},
+  {id:"aldente", n:"Al'dente Trattoria", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:28, s:["ITA","TER"],
+   a:"Trattoria et épicerie fine sur la place du Grand Martroy, terrasse.",
+   w:"Pâtes fraîches maison, listée par Gault&Millau.", g:"11 place du Grand Martroy · salades 16 €, environ 28 € le soir",
+   soirs:["je","ve","sa"], hv:true, h:"Dîner jeu.-sam. 19h-22h · lundi midi seulement · fermé le dimanche."},
+  {id:"felicie", n:"Félicie", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:35, s:["ITA"],
+   a:"Trattoria au cœur de Pontoise.",
+   w:"Cuisine sicilienne, 4,7/5 sur près de 400 avis.", g:"2 rue de l'Hôtel de Ville · 30 à 40 € le soir · formule midi environ 14 €",
+   soirs:null, h:"Midi 11h30-14h30 confirmé. Soirs à vérifier."},
+  {id:"mia-osteria", n:"Mia Osteria", v:"Cergy", z:"Cergy-Pontoise", t:20, p:30, s:["ITA","TER"],
+   a:"Osteria conviviale.",
+   w:"Cuisine italienne faite maison, 4,4/5 sur 732 avis.", g:"1 av. de la Plaine des Sports · €€",
+   soirs:null, h:"Ouvert jusqu'à 22h30. Jours à vérifier."},
+  {id:"cala-luna", n:"Cala Luna", v:"Éragny-sur-Oise", z:"Cergy-Pontoise", t:25, p:28, s:["ITA"],
+   a:"Belle décoration, terrasse, esprit « comme à la maison ».",
+   w:"Grande carte, portions copieuses, beaucoup de desserts. Brunch à volonté le dimanche.", g:"291 av. Roger Guichard · pâtes environ 20 €, pizzas environ 15 €",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"sushi-kyo", n:"Sushi Kyo", v:"Cergy", z:"Cergy-Pontoise", t:20, p:20, s:["JAP"],
+   a:"Cadre agréable, service rapide et souriant. Halal.",
+   w:"Japonais réputé pour la qualité : 9,4/10 sur TheFork.", g:"Centre commercial des 3 Fontaines · budget moyen 19 €",
+   soirs:["lu","ma"], ps:true, h:"Lun.-mar. 11h30-14h30 et 18h30-22h confirmés, autres jours à vérifier."},
+  {id:"owasa", n:"O'Wasa", v:"Cergy (Port Cergy)", z:"Cergy-Pontoise", t:20, p:32, s:["JAP","BR"],
+   a:"Japonais moderne au bord du port, cuisine ouverte en salle.",
+   w:"Sushis et makis au thon très appréciés, style nippo-américain.", g:"Port Cergy · prix estimé",
+   soirs:null, h:"Horaires et prix non trouvés : appeler."},
+  {id:"sushi-sur-oise", n:"Sushi sur Oise", v:"Beaumont-sur-Oise", z:"Vallée de l'Oise", t:35, p:18, s:["JAP"],
+   a:"Petite adresse japonaise, surtout à emporter.",
+   w:"Excellentes notes (4,8/5 sur plus de 850 avis). Places assises à vérifier.", g:"13 rue Albert-Ier · 12 à 20 €",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"sushi-club", n:"Sushi Club", v:"La Garenne-Colombes", z:"Hauts-de-Seine", t:45, p:40, s:["JAP","CHIC"], vol:true,
+   a:"Japonais semi-gastronomique, commande à volonté sur tablette.",
+   w:"Plus de 11 000 avis à 4,7/5. À volonté haut de gamme, à côté de Tata Yoyo.", g:"2 place de l'Europe · environ 40 € le menu du soir",
+   soirs:ALL7, h:"Tous les jours 12h-14h30 et 19h-22h45 (guide Pudlowski)."},
+
+  // Bistrots Pas Parisiens
+  {id:"chez-mimi", n:"Chez Mimi (ex-Bistrot Pas Parisien)", v:"Colombes", z:"Hauts-de-Seine", t:45, p:35, s:["PP","BRA","CHIC"],
+   a:"Brasserie de 1907 : zinc, miroirs, moulures, lustres. Chic sans chichi.",
+   w:"Le bistrot historique du groupe, rebaptisé et rénové en 2025.", g:"Gault&Millau 11/20 · Assiette Michelin · menu « Bistrot » 34,90 €",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. 12h-14h et 19h-23h · fermé dimanche et lundi (Michelin)."},
+  {id:"tata-yoyo", n:"Tata Yoyo", v:"La Garenne-Colombes", z:"Hauts-de-Seine", t:45, p:35, s:["PP","TER"],
+   a:"Déco rustique et bois patiné, esprit maison de famille, on chante pour les anniversaires.",
+   w:"Cuisine d'un finaliste de Top Chef 2022, plats canailles revisités (pâté en croûte, saucisse-purée).", g:"26 av. de Verdun-1916 · menu 29,99 à 39,99 € · déjeuner 25 €",
+   soirs:null, h:"Jours d'ouverture à vérifier."},
+  {id:"chou-chanorier", n:"Le Chou de Chanorier", v:"Croissy-sur-Seine", z:"Boucle de Seine", t:45, p:40, s:["PP","CHIC","TER"],
+   a:"Dans le château Chanorier, terrasse guinguette l'été.",
+   w:"Le seul Pas Parisiens des Yvelines. Chef Charlie Anne (Top Chef), cuisine normande modernisée.", g:"12 Grande Rue · menus 25 à 49 €",
+   soirs:ALL7, hv:true, h:"Ouvert tous les jours toute l'année (sauf 1er janvier et 25 décembre)."},
+  {id:"sapristi", n:"Sapristi", v:"Rueil-Malmaison", z:"Hauts-de-Seine", t:50, p:38, s:["PP","CHIC"],
+   a:"Conçu comme une maison de famille en plusieurs pièces, vaste terrasse près de la mairie.",
+   w:"L'une des adresses phares du groupe, carte de saison qui change souvent.", g:"Gault&Millau 11/20 · Assiette Michelin · menu du soir 35 €",
+   soirs:["lu","ma","me","je","ve","sa"], ps:true, h:"Dimanche : sources contradictoires (ouvert tous les jours selon Sortiraparis, fermé selon Pudlowski). Appeler."},
+  {id:"splash", n:"Splash", v:"Asnières-sur-Seine", z:"Hauts-de-Seine", t:45, p:40, s:["PP","EAU","BR"],
+   a:"Au bord de l'eau, déco plage, grandes tablées. De novembre à l'hiver : chalet « Chez Monix » (fondue, raclette).",
+   w:"Le plus festif des Pas Parisiens. Menu chalet 39,99 € en ce moment.", g:"Port Van Gogh · Gault&Millau 12/20 · environ 40 €",
+   soirs:ALL7, hv:true, h:"Tous les jours 12h-15h et 19h-23h."},
+  {id:"saperlipopette", n:"Saperlipopette!", v:"Puteaux", z:"Hauts-de-Seine", t:50, p:40, s:["PP","BIS","CHIC"],
+   a:"Salon-bibliothèque chic et feutré.",
+   w:"Tous les codes de la bistronomie, ardoise renouvelée toutes les quatre semaines.", g:"Gault&Millau 13/20 · menu gourmand 39,99 € · déjeuner 24,99 à 29,99 €",
+   soirs:ALL7, hv:true, h:"Ouvert tous les jours."},
+  {id:"coco-rocco", n:"Coco Rocco", v:"Puteaux", z:"Hauts-de-Seine", t:50, p:36, s:["PP","ITA"],
+   a:"Dolce vita version Pas Parisiens, à côté d'un petit parc.",
+   w:"Le premier italien du groupe : pizzas, pâtes, vitello tonnato.", g:"95 av. du Général-de-Gaulle · menu pâtes/pizza 35,99 €",
+   soirs:ALL7, hv:true, h:"Tous les jours 12h-14h30 et 19h-22h30."},
+  {id:"la-haut", n:"Là-Haut", v:"Suresnes", z:"Hauts-de-Seine", t:50, p:42, s:["PP","CHIC","BR"],
+   a:"Baies vitrées face aux tours de la Défense qui s'allument au dîner.",
+   w:"Pour un dîner avec vue, version Pas Parisiens.", g:"70 av. Franklin-Roosevelt · Gault&Millau 12,5/20 · Assiette Michelin · dès 39,99 €",
+   soirs:ALL7, hv:true, h:"Midi et soir tous les jours d'après les sources récentes."},
+
+  // Vexin
+  {id:"clos-petillon", n:"Le Clos du Pétillon", v:"Théméricourt", z:"Vexin", t:15, p:34, s:["TER"],
+   a:"Cadre champêtre au cœur du parc du Vexin, cheminée l'hiver, grande terrasse l'été.",
+   w:"Produits des fermes alentour et petites touches corses. Coup de cœur du Parc du Vexin.", g:"Menu 34 € · menu du jour 22 €",
+   soirs:["ve","sa"], hv:true, h:"Horaires d'hiver : soirs ven.-sam. 19h-21h · midi mer., jeu., dim. · fermé lun.-mar."},
+  {id:"petille", n:"La Pétille", v:"Magny-en-Vexin", z:"Vexin", t:15, p:25, s:["TER"],
+   a:"Restaurant de bourg convivial, esprit partage.",
+   w:"Produits frais et locaux, cuisine traditionnelle et gourmande.", g:"27 place d'Armes · menu 20 à 30 €",
+   soirs:["je","ve","sa"], hv:true, h:"Midi tous les jours sauf mercredi · soirs jeu.-sam."},
+  {id:"ptit-bouchon", n:"Le P'tit Bouchon", v:"Magny-en-Vexin", z:"Vexin", t:15, p:28, s:["TER"],
+   a:"Petite salle simple, place du marché.",
+   w:"Recettes régionales et producteurs locaux. Un avis trouve les prix élevés.", g:"8 place du Marché-aux-Fruits",
+   soirs:["je","ve","sa"], hv:true, h:"Service du soir court : jeu. 19h30-20h30, ven.-sam. 19h30-21h · midi mer.-dim."},
+  {id:"jardins-epicure", n:"Les Jardins d'Épicure", v:"Bray-et-Lû", z:"Vexin", t:25, p:60, s:["CHIC","GAS"],
+   a:"Demeure avec parc et rivière, tables autour de la piscine sous verrière.",
+   w:"Pour une occasion : cuisine soignée, menus dégustation.", g:"Gault&Millau 12/20 · 45 à 82 €",
+   soirs:MA_SA, hv:true, h:"Fermé lundi, mardi midi et dimanche soir."},
+  {id:"cambrousse", n:"Cambrousse", v:"Saint-Cyr-en-Arthies", z:"Vexin", t:25, p:70, s:["CHIC","GAS","TER"],
+   a:"Château de la Bûcherie dans un parc classé de 60 hectares.",
+   w:"Le grand soir à la campagne, à 25 min de chez vous.", g:"5 rue du Parc · Gault&Millau 12,5/20 · 65 à 95 €",
+   soirs:null, h:"Fermé lundi et mardi. Soirs à vérifier."},
+  {id:"bords-seine-rg", n:"Les Bords de Seine", v:"La Roche-Guyon", z:"Vexin", t:30, p:30, s:["EAU","TER"],
+   a:"Face à la Seine, dans l'un des plus beaux villages de France.",
+   w:"Le cadre avant tout : cuisine simple, avis partagés sur l'assiette.", g:"Menu 33 € · menu du jour 17,90 à 22,90 €",
+   soirs:ALL7, hv:true, h:"Tous les jours 12h-14h et 19h-21h, du 5 janvier au 15 décembre."},
+  {id:"relais-chateau-rg", n:"Le Relais du Château", v:"La Roche-Guyon", z:"Vexin", t:30, p:22, s:["TER","BRA"],
+   a:"Brasserie familiale au pied du château, terrasse au soleil.",
+   w:"Plats maison et accueil très chaleureux d'après les avis.", g:"Plats de 4,50 à 16,50 €",
+   soirs:null, h:"Plutôt le midi. Soirs à vérifier."},
+  {id:"panoramique", n:"Le Panoramique (Domaine de la Corniche)", v:"Rolleboise", z:"Vexin", t:40, p:85, s:["CHIC","GAS","EAU"], star:1,
+   a:"Terrasse à couper le souffle au-dessus de la Seine, près de Giverny.",
+   w:"Table locavore étoilée pour une très grande occasion.", g:"1 étoile Michelin · Gault&Millau 14/20 · menu 59 €, carte jusqu'à 118 € · brunch dimanche 55 €",
+   soirs:["me"], ps:true, h:"Fermé lundi et mardi · mercredi 19h-21h · autres soirs à vérifier."},
+
+  // Cergy-Pontoise
+  {id:"maupertu", n:"Le Maupertu", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:49, s:["CHIC","TER"],
+   a:"Maison bourgeoise en bord d'Oise, ambiance feutrée et cosy.",
+   w:"Maître cuisinier, menu très apprécié pour son rapport qualité/prix.", g:"Menu 48-49 €",
+   soirs:["lu","ma","je","ve","sa"], hv:true, h:"Soirs 19h30-22h · fermé le mercredi · dimanche midi seulement."},
+  {id:"orqidee", n:"L'Or Q'Idée", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:110, s:["CHIC","GAS"], star:1,
+   a:"Grande salle élégante sous la cathédrale, cuisine et cave vitrées. Romantique.",
+   w:"La seule table étoilée du Val-d'Oise (plus une étoile verte).", g:"1 étoile Michelin · Gault&Millau 15/20 · carte blanche 110 € · déjeuner 62 €",
+   soirs:null, h:"Ouvert du lundi au samedi. Soirs probablement jeu.-sam. seulement : à confirmer."},
+  {id:"bonne-entente", n:"La Bonne Entente", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:26, s:["BR","TER"],
+   a:"Petit bistrot et bar à vin sur les hauteurs du vieux Pontoise.",
+   w:"Pour un verre et des assiettes simples dans le vieux centre.", g:"21 à 30 €",
+   soirs:["je","ve"], hv:true, h:"Jeu.-ven. jusqu'à minuit · lun.-mer. et sam. fermeture 20h30 · fermé le dimanche."},
+  {id:"petit-feu", n:"Le Petit Feu", v:"Osny", z:"Cergy-Pontoise", t:15, p:18, s:["BIS","MON"],
+   a:"Restaurant moderne, banquettes bleu foncé, toit-terrasse.",
+   w:"Très bien noté (4,9/5). Uber Eats le classe en cuisine turque, grecque et française : à confirmer sur place.", g:"10 rue du Petit Albi · prix moyen 18 € (TheFork)",
+   soirs:["lu","ma","me","je","ve","sa"], hv:true, h:"Lun.-sam. 11h-15h et 18h30-22h · fermé le dimanche (Google)."},
+  {id:"vigne-gourmande", n:"Auberge de la Vigne Gourmande", v:"Osny", z:"Cergy-Pontoise", t:15, p:45, s:["TER","CHIC"],
+   a:"Salle calme, idéale pour un dîner à deux.",
+   w:"Gastronomie française classique, le chef vient expliquer ses plats.", g:"Parking · prix estimé",
+   soirs:null, h:"Horaires non trouvés : appeler."},
+
+  // Vallée de l'Oise
+  {id:"chemin-peintres", n:"Le Chemin des Peintres", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:35, s:["TER","BIS"],
+   a:"Bistrot familial au pied de l'église peinte par Van Gogh, terrasse.",
+   w:"N°1 d'Auvers dans les classements d'avis, portions généreuses.", g:"9,2/10 sur 1 700 avis · prix estimé",
+   soirs:null, h:"Horaires non trouvés : appeler."},
+  {id:"relais-peintres", n:"Le Relais des Peintres", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:34, s:["TER","CHIC"],
+   a:"Relais de poste du XVIIe siècle, très joli cadre.",
+   w:"Maître cuisinier, menu du jour servi aussi le soir.", g:"Gault&Millau 11/20 · menu du jour 27 à 34 € · menu avec accords vins 92 €",
+   soirs:["lu","ma","je","ve","sa"], hv:true, h:"Soirs 19h30-21h30 · fermé le mercredi · dimanche midi seulement."},
+  {id:"lucy", n:"LuCy", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:30, s:["BIS","BR"],
+   a:"Adresse soignée avec bar et cocktails.",
+   w:"Cuisine française raffinée sur produits frais, 4,8/5 sur TheFork.", g:"5 rue Marceau · 21 à 30 €",
+   soirs:["me","je","ve","sa"], hv:true, h:"Mer. 19h-21h, jeu.-sam. 19h-22h · dimanche midi · fermé lun.-mar."},
+  {id:"cordeville", n:"Le Cordeville", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:28, s:["TER"],
+   a:"Restaurant « dans son jus », ambiance chaleureuse.",
+   w:"Cuisine familiale, viandes françaises et légumes locaux.", g:"Prix estimé",
+   soirs:null, h:"Horaires non trouvés : appeler."},
+  {id:"chiquito", n:"Le Chiquito", v:"Méry-sur-Oise", z:"Vallée de l'Oise", t:25, p:85, s:["CHIC","GAS"],
+   a:"Maison de caractère, service classique.",
+   w:"Pour une grande occasion à 25 min.", g:"Gault&Millau 13,5/20 · 76 à 92 € · sélection Michelin",
+   soirs:["ma","je","ve","sa"], ps:true, h:"Fermé dimanche et lundi · mercredi soir : sources contradictoires."},
+  {id:"mauricette", n:"Mauricette", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:32, s:["BRA","TER","CHIC"],
+   a:"Brasserie familiale avec verrière, déco bistrot moderne. Très appréciée en couple.",
+   w:"N°1 de L'Isle-Adam dans les avis (8,4/10 sur plus de 1 000 avis).", g:"6 place du Pâtis · menu entrée-plat-dessert 18,50 € (midi)",
+   soirs:null, h:"Ouvert le soir d'après les avis. Jours à vérifier."},
+  {id:"table-cassan", n:"La Table de Cassan", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:33, s:["TER"],
+   a:"Restaurant de quartier soigné.",
+   w:"Produits frais, très bien noté (8,4/10).", g:"2 av. Michel-Poniatowski · formule plat + dessert 31 €",
+   soirs:["ve","sa"], hv:true, h:"Soirs ven.-sam. seulement · fermé le lundi (site de la ville)."},
+  {id:"eleven", n:"L'Eleven (Le Nautilus ?)", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:32, s:["EAU","BRA"],
+   a:"Terrasse sur l'Oise face à la plage de L'Isle-Adam.",
+   w:"Carte élaborée. Des avis de 2026 parlent d'un nouveau nom, « Le Nautilus » : à confirmer.", g:"11 rue de Conti · formule entrée-plat-dessert 31,50 €",
+   soirs:["lu","me","je","ve","sa"], ps:true, h:"Réservable lun. et mer.-sam. 19h-minuit · mardi et dimanche à vérifier."},
+  {id:"le-nid", n:"Le Nid", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:40, s:["EAU","BR"],
+   a:"Restaurant-terrasse sur la berge, déco d'architecte.",
+   w:"Cuisine de bord de mer au bord de l'Oise. Brunch le dimanche.", g:"15 quai de l'Oise · formule midi en semaine",
+   soirs:ALL7, hv:true, h:"Ouvert tous les jours, réservable de 12h à 1h."},
+  {id:"plage-isle-adam", n:"Restaurant de la Plage", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:32, s:["EAU","CHIC","TER"],
+   a:"Maison de 1895, vue sur la plus grande plage fluviale de France, ambiance chic.",
+   w:"Cuisine traditionnelle à prix raisonnables.", g:"1 av. du Général-de-Gaulle · menu environ 30 €",
+   soirs:["ma","me","je","ve","sa"], ps:true, h:"Fermé le lundi · mar.-mer. 12h-14h et 19h30-21h30 · « midi et soir toute l'année ». Dimanche soir à vérifier."},
+  {id:"cambuse", n:"La Cambuse", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:28, s:["TER"],
+   a:"Adresse conviviale et gourmande.",
+   w:"Viandes, poissons, foie gras : une valeur sûre locale (4,6/5).", g:"71 rue de Pontoise · 20 à 30 €",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"ami-pinot", n:"L'Ami Pinot", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:35, s:["BR","BIS"],
+   a:"Bar à vins nature et restaurant, place du Pâtis.",
+   w:"Pour une soirée vins et assiettes (tartare de thon…).", g:"8 place du Pâtis · prix estimé",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"charbon", n:"Le Charbon", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:45, s:["BR","BIS"],
+   a:"Terrasse sur le golf, concerts, happy hour, cocktails (environ 18 €).",
+   w:"Statut incertain : avis mitigés, et l'adresse a peut-être changé de concept. Appeler avant.", g:"Golf de L'Isle-Adam",
+   soirs:null, h:"À vérifier."},
+  {id:"la-plume", n:"La Plume", v:"Presles", z:"Vallée de l'Oise", t:35, p:59, s:["CHIC","GAS"],
+   a:"Au Domaine des Vanneaux (golf et spa), potager et ruches. Romantique.",
+   w:"Cuisine d'auteur, un vrai cran au-dessus pour le prix.", g:"Gault&Millau 13,5/20 · 59 €",
+   soirs:null, h:"Fermé du lundi au mercredi. Autres soirs à vérifier."},
+  {id:"epis-or", n:"Les Épis d'Or", v:"Champagne-sur-Oise", z:"Vallée de l'Oise", t:35, p:45, s:["TER","CHIC"],
+   a:"Salle rustique (poutres, pierre), terrasse qui surplombe la vallée de l'Oise.",
+   w:"Tout fait maison, soirées à thème chaque mois.", g:"Gault&Millau 12/20 · menu du soir 36 € · carte environ 49 €",
+   soirs:["ma","je","ve","sa"], hv:true, h:"Soirs 19h-21h30 · mercredi midi seulement · fermé dimanche et lundi."},
+
+  // Boucle de Seine
+  {id:"obistronome", n:"O'Bistronome", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:49, s:["BIS","CHIC"],
+   a:"Véranda ouverte sur un jardin zen, calme et élégant.",
+   w:"L'adresse la plus courue de Conflans, tartare préparé en salle.", g:"171 av. Carnot · menu du soir 49 € · déjeuner 31 € · réserver",
+   soirs:MA_SA, hv:true, h:"Fermé dimanche et lundi."},
+  {id:"obistro-cote", n:"O'Bistro d'à Côté", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:35, s:["BIS"],
+   a:"Le petit frère d'O'Bistronome, salle intimiste et moderne.",
+   w:"Poissons et fruits de mer de saison, un peu moins cher que le grand frère.", g:"160 av. Carnot · prix estimé",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"berges-bonheur", n:"Aux Berges du Bonheur", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:35, s:["EAU","CHIC"],
+   a:"Véranda avec vue sur la Seine, ambiance feutrée, terrasse l'été.",
+   w:"Côte de bœuf, tartare d'espadon, foie gras maison. 4,7/5 sur 869 avis.", g:"15 quai des Martyrs-de-la-Résistance · menu environ 35 €",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"bijou-revel", n:"Bijou Bar", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:30, s:["BR","EAU"],
+   a:"Bar-restaurant animé au bord de l'eau, plus de 200 bières et des whiskys.",
+   w:"Cocktails très réussis, planches et plats copieux à prix raisonnables.", g:"19 rue René-Albert",
+   soirs:["lu","ma","me","di"], ps:true, h:"Lun.-mar. et dim. 19h-21h30, mer. 18h30-22h · jeu.-sam. non affichés dans la source."},
+  {id:"bateau-chocolate", n:"Le Bateau Chocolaté", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:29, s:["MON","EAU"],
+   a:"Péniche Freycinet des années 60 amarrée sur la Seine.",
+   w:"Cuisine créole (colombo, poulet boucané), soirées à thème. 9,1/10 sur 1 489 avis.", g:"Place Fouillère · budget moyen 29 € · brunch 38 €",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"avant-seine", n:"L'Avant Seine", v:"Andrésy", z:"Boucle de Seine", t:30, p:32, s:["EAU","BRA"],
+   a:"Face au fleuve au cœur du village, soirées jazz.",
+   w:"Bistrot-brasserie, produits frais, cocktails.", g:"44 bd Noël-Marc · 25 à 40 €",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"la-cucina", n:"La Cucina Pane Amore e Fantasia", v:"Andrésy", z:"Boucle de Seine", t:30, p:28, s:["ITA","EAU"],
+   a:"Trattoria, salon de thé et épicerie fine, esprit cinéma italien des années 50.",
+   w:"Pizzas et pâtes maison, au bord de la Seine.", g:"46 bd Noël-Marc · 20 à 35 €",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"tastevin", n:"Le Tastevin", v:"Maisons-Laffitte", z:"Boucle de Seine", t:40, p:70, s:["CHIC","GAS"],
+   a:"Maison bourgeoise au calme, terrasse dans le jardin.",
+   w:"Cuisine classique précise (raviole de homard), cave bordelaise.", g:"9 av. Eglé · Gault&Millau 12,5/20 · Assiette Michelin · 43 à 99 € · déjeuner 54 €",
+   soirs:["me"], ps:true, h:"Fermé lundi et mardi · mercredi 19h30-21h30 · autres soirs à vérifier."},
+  {id:"la-plancha", n:"La Plancha (de Kiko)", v:"Maisons-Laffitte", z:"Boucle de Seine", t:40, p:45, s:["MON","BIS"],
+   a:"Maison bourgeoise face à la gare, déco classique et moderne.",
+   w:"Turbot à la plancha, profiteroles très réputées. 4,8/5.", g:"5 av. de Saint-Germain · Gault&Millau 12/20 · Assiette Michelin · menu 39 €, entrée-plat-dessert 50 €",
+   soirs:ALL7, hv:true, h:"Tous les soirs 19h-23h30 · midi sauf mardi et mercredi."},
+  {id:"wauthier", n:"Le Wauthier by Cagna", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:70, s:["CHIC","BIS"],
+   a:"Bistrot chic et intime caché dans une rue du centre.",
+   w:"Menu à 79 € tout compris (champagne, vin, café) très apprécié.", g:"Sélection Michelin · menu 79 € boissons comprises",
+   soirs:MA_SA, hv:true, h:"Fermé dimanche et lundi · mercredi soir seulement."},
+  {id:"bistrot-logique", n:"Le Bistrot Logique", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:39, s:["BIS","TER"],
+   a:"Bistronomique, décor clair et moderne.",
+   w:"Fait maison, terroir, entrée-plat-dessert 39 €.", g:"8 bis av. Carnot",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"le-manege", n:"Le Manège", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:35, s:["TER","BIS"],
+   a:"Pierres, poutres, cave voûtée et plaques émaillées rétro, à deux pas du château.",
+   w:"Maître restaurateur, tout est fait maison.", g:"5 rue Saint-Louis · menus 19,50 à 24,50 € · dégustation 41,50 €",
+   soirs:ALL7, hv:true, h:"Tous les jours (lun.-jeu. 19h-22h, ven.-sam. 19h30-23h, dim. 19h-21h). Le guide Pudlowski le dit fermé le dimanche soir : appeler."},
+  {id:"fulcosa", n:"Au Fulcosa", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:38, s:["BIS","TER"],
+   a:"Bistrot culinaire chaleureux à Fourqueux.",
+   w:"Cuisine de saison, ne pas rater le soufflé chaud.", g:"2 rue du Maréchal-Foch · Gault&Millau 12/20 · 25 à 43 €",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. 12h-14h et 19h15-21h15 · fermé dimanche et lundi (Michelin)."},
+  {id:"toucan", n:"Le Toucan", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:35, s:["BIS","CHIC"],
+   a:"Bistrot chic face au château : mur végétal, bambou, osier, terrasse.",
+   w:"Fait maison, classiques revisités avec des touches du monde.", g:"18 place Charles-de-Gaulle · prix estimé",
+   soirs:null, h:"Horaires à vérifier."},
+
+  // Val-d'Oise est
+  {id:"vin-sur-vin", n:"Vin sur Vin", v:"Ermont", z:"Val-d'Oise est", t:35, p:75, s:["CHIC","GAS"],
+   a:"Petite salle cossue, bonne sélection de vins nature.",
+   w:"Menu unique qui change chaque semaine. Bien moins cher le midi (43 €).", g:"122 rue de Sannois · Gault&Millau 13/20 · menu du soir 74 à 78 €",
+   soirs:["je","ve","sa"], hv:true, h:"Dîner jeu.-sam. seulement · midi mar.-sam. · fermé dimanche et lundi."},
+  {id:"odistingo", n:"O'Distingo", v:"Eaubonne", z:"Val-d'Oise est", t:35, p:50, s:["BIS","CHIC"],
+   a:"Lieu élégant mais chaleureux.",
+   w:"Cuisine raffinée, parfois conceptuelle. Un guide trouve les prix « vigoureux ».", g:"12 av. de l'Europe · Gault&Millau 12,5/20 · prix estimé",
+   soirs:MA_SA, hv:true, h:"Soirs mar.-sam. 19h-23h30 · dimanche midi · fermé le lundi."},
+  {id:"les-3m", n:"Les 3M", v:"Cormeilles-en-Parisis", z:"Val-d'Oise est", t:35, p:42, s:["BR","BIS"],
+   a:"Bistrot chic et bar-lounge en pleine forêt, grande terrasse, concerts le jeudi.",
+   w:"Cuisine de la cheffe Yona Picot, près de 2 000 avis à 4,6/5.", g:"21 route Stratégique · 30 à 55 €",
+   soirs:null, h:"Horaires à vérifier."},
+
+  // Normandie & Oise
+  {id:"cappeville", n:"Le Cappeville", v:"Gisors", z:"Normandie & Oise", t:25, p:45, s:["TER","CHIC"],
+   a:"Une institution de Gisors tenue par la famille Potel.",
+   w:"Cuisine normande modernisée (soufflé au calva…).", g:"17 rue Cappeville · Gault&Millau 12/20 · menus 23 à 75 €",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"ecrin-saveurs", n:"L'Écrin des Saveurs", v:"Gisors", z:"Normandie & Oise", t:25, p:26, s:["TER","BR"],
+   a:"Crêperie près du château, terrasse.",
+   w:"Crêpes et galettes, cocktails très appréciés, options végétariennes. 4,4/5 sur 766 avis Google.", g:"28 rue du Faubourg-de-Neaufles · 02 77 14 12 97 · 20 à 30 €",
+   soirs:["lu","ma","ve","sa","di"], hv:true, h:"Soirs lun., mar. et dim. 19h-21h, ven.-sam. 19h-21h30 · mer.-jeu. midi seulement (Google)."},
+  {id:"oscar-giverny", n:"Oscar", v:"Giverny", z:"Normandie & Oise", t:40, p:39, s:["BIS","TER","CHIC"],
+   a:"Bistrot chic dans le jardin du musée des Impressionnismes.",
+   w:"Signé David Gallienne (étoilé), menu du soir et du week-end 39 €.", g:"99 rue Claude-Monet · Gault&Millau 12/20 · menu du jour 35 €",
+   soirs:null, h:"Soirs à vérifier, surtout en hiver."},
+  {id:"musardiere", n:"La Musardière", v:"Giverny", z:"Normandie & Oise", t:40, p:45, s:["TER","CHIC"],
+   a:"Hôtel de charme du XIXe siècle avec jardin.",
+   w:"Bistronomie le midi (« Le M »), dîner plus ambitieux (« Révélations »).", g:"123 rue Claude-Monet · Gault&Millau 11,5/20 · Assiette Michelin · 35 à 49 €",
+   soirs:null, h:"Horaires à vérifier."},
+  {id:"jardin-plumes", n:"Le Jardin des Plumes", v:"Giverny", z:"Normandie & Oise", t:40, p:150, s:["CHIC","GAS"], star:1,
+   a:"Maison anglo-normande de 1912 et jardin.",
+   w:"La grande table étoilée de David Gallienne, pour un anniversaire.", g:"1 rue du Milieu · 1 étoile Michelin · Gault&Millau 16/20 · 150 à 180 €",
+   soirs:null, h:"Fermé lundi et mardi. Autres soirs à vérifier."},
+  {id:"senso", n:"Senso", v:"Beauvais", z:"Normandie & Oise", t:45, p:45, s:["BIS","BR"],
+   a:"Restaurant, cave et bar à vin sur la place du marché.",
+   w:"Cuisine de saison soignée, kouign-amann maison réputé.", g:"25 rue d'Agincourt · Gault&Millau 12,5/20 · Assiette Michelin · 21 à 65 € · déjeuner 26 €",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. midi et soir (dîner 19h30 à 21h15-21h30) · fermé dimanche et lundi (Michelin)."},
+  {id:"gargouille", n:"La Gargouille", v:"Beauvais", z:"Normandie & Oise", t:45, p:55, s:["TER","CHIC"],
+   a:"Face à la cathédrale, jolie salle en mezzanine au décor original.",
+   w:"Bistrot à dimension gastronomique, menus à l'aveugle.", g:"75 rue Saint-Pierre · Gault&Millau 12/20 · 35 à 85 € · menus 70 et 85 €",
+   soirs:null, h:"Horaires à vérifier."}
+];
+
+/* ---------- Questionnaire (points cachés) ---------- */
+const Q = [
+  {k:"accueil", q:"L'accueil en arrivant ?", o:[["Chaleureux, on s'est sentis attendus",10],["Correct, sans plus",6],["Froid ou expéditif",2],["Désagréable",0]]},
+  {k:"cadre", q:"Le cadre et la déco ?", o:[["Coup de cœur",12],["Joli, agréable",8],["Banal",4],["On n'a pas aimé",0]]},
+  {k:"son", q:"Pour discuter à deux, l'ambiance était…", o:[["Parfaite",6],["Animée, mais ça allait",5],["Trop calme, un peu morte",2],["Trop bruyante",1]]},
+  {k:"entrees", q:"Les entrées ?", skip:"On n'en a pas pris", o:[["Excellentes",10],["Bonnes",7],["Moyennes",3],["Décevantes",0]]},
+  {k:"plats", q:"Les plats ?", o:[["Waouh",16],["Très bons",12],["Corrects",6],["Décevants",0]]},
+  {k:"desserts", q:"Les desserts ?", skip:"Pas de dessert", o:[["Excellents",10],["Bons",7],["Moyens",3],["Décevants",0]]},
+  {k:"maison", q:"Fait maison et qualité des produits : votre ressenti ?", o:[["Ça se sent, c'est du vrai",8],["Plutôt oui",5],["On a des doutes",2],["Ça sentait l'industriel",0]]},
+  {k:"service", q:"Le service pendant le repas ?", o:[["Aux petits soins",10],["Efficace",7],["Lent, ou des oublis",3],["Un vrai problème",0]]},
+  {k:"boire", q:"Vins, cocktails, boissons ?", skip:"On n'a pas regardé", o:[["Super choix",6],["Correct",4],["Décevant",1]]},
+  {k:"prix", q:"Le rapport qualité/prix ?", o:[["Excellent",12],["Juste",8],["Un peu cher",4],["Trop cher pour ce que c'est",0]]},
+  {k:"soiree", q:"Au final, la soirée était…", o:[["Mémorable",14],["Très bonne",10],["Bien, sans plus",5],["Bof",1]]},
+  {k:"retour", q:"On y retourne ?", o:[["Dès que possible",14],["Oui, à l'occasion",9],["Seulement si on nous invite",3],["Jamais",0]]},
+  {k:"loft", q:"Comparé au Loft à L'Isle-Adam ?", skip:"Difficile à dire", notFor:"le-loft", o:[["Mieux",8],["Aussi bien",5],["Moins bien",2]]},
+  {k:"aime", multi:true, q:"Ce qu'on a adoré (plusieurs choix)", o:["Les plats","Les desserts","Le cadre","L'accueil","Le service","Les vins","Les cocktails","Les portions","Le calme","L'ambiance festive","Le prix","La terrasse / la vue"]},
+  {k:"moins", multi:true, q:"Ce qu'on a moins aimé (plusieurs choix)", o:["Rien à redire","Le bruit","L'attente","Les portions","Le prix","Le service","La déco","Un plat raté","Les desserts","La carte trop courte"]},
+  {k:"fin", final:true}
+];
+function computeScore(ans){
+  let got=0, max=0;
+  for(const qq of Q){
+    if(qq.multi||qq.final) continue;
+    const a=ans[qq.k];
+    if(a==null||a==="skip") continue;
+    const m=Math.max(...qq.o.map(x=>x[1]));
+    const opt=qq.o[a]; if(!opt) continue;
+    got+=opt[1]; max+=m;
+  }
+  let s = max? got/max*100 : 50;
+  const plus=(ans.aime||[]).length; s+=Math.min(plus,4)*1;
+  const minus=(ans.moins||[]).filter(x=>x!=="Rien à redire").length; s-=Math.min(minus*1.5,5);
+  return Math.round(Math.max(0,Math.min(100,s))*10)/10;
+}
+function verdict(s){
+  if(s>=85) return ["Coup de cœur","v-coeur"];
+  if(s>=66) return ["Très bien","v-tb"];
+  if(s>=52) return ["Bien","v-bien"];
+  if(s>=38) return ["Mitigé","v-mitige"];
+  return ["Déçus","v-decus"];
+}
+
+/* ---------- État ---------- */
+const state = { visits:{}, envies:{}, ajouts:{}, horaires:{}, ready:false, mode:"local" };
+const ui = { view:"liste", styles:new Set() };
+let db=null;
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const tier = p=> p<30?"€":p<45?"€€":p<70?"€€€":"€€€€";
+function withHours(r){
+  const o=state.horaires[r.id]; if(!o) return r;
+  if(o.jours){ const soirs=DAYS.map(d=>d[0]).filter(k=>o.jours[k]&&o.jours[k].s); const midis=DAYS.map(d=>d[0]).filter(k=>o.jours[k]&&o.jours[k].m);
+    return {...r, soirs, midis, ps:false, hv:false, h:o.h||"", userH:o, origH:r.h}; }
+  if(Array.isArray(o.soirs)) return {...r, soirs:o.soirs, ps:false, hv:false, h:o.h||"", userH:o, origH:r.h};
+  return r;
+}
+function allR(){ return R.concat(Object.values(state.ajouts).map(a=>({...a, custom:true}))).map(withHours); }
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600); }
+
+/* ---------- Persistance : db partagé, sinon navigateur ---------- */
+const LS="tables-marines-v1";
+function loadLocal(){ try{ const d=JSON.parse(localStorage.getItem(LS)||"{}"); state.visits=d.visits||{}; state.envies=d.envies||{}; state.ajouts=d.ajouts||{}; state.horaires=d.horaires||{}; }catch(e){} }
+function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify({visits:state.visits,envies:state.envies,ajouts:state.ajouts,horaires:state.horaires})); }catch(e){} }
+async function put(col,id,data){
+  if(!db && gh) return ghOp(col,id,data);
+  if(db){ try{ await db.collection(col).doc(id).set(data); return true; }catch(e){ toast(e&&e.code==="quota_exceeded"?"Stockage plein : supprimez d'anciennes visites.":"Enregistrement impossible pour l'instant."); return false; } }
+  saveLocal(); return true;
+}
+async function del(col,id){
+  if(!db && gh) return ghOp(col,id,null);
+  if(db){ try{ await db.collection(col).doc(id).delete(); return true; }catch(e){ toast("Suppression impossible pour l'instant."); return false; } }
+  saveLocal(); return true;
+}
+function snapTo(key, snap){ const o={}; snap.docs.forEach(d=>{ if(d.exists) o[d.id]=d.data(); }); state[key]=o; render(); }
+loadLocal();
+(async()=>{
+  try{
+    if(!window.claude||!window.claude.use){ setTimeout(ghInit,0); return; }
+    db = await window.claude.use("db");
+    if(!db){ showNotice(); return; }
+    state.mode="db";
+    const timer=setTimeout(()=>{ $("#notice").innerHTML='<p class="notice">Vos notes enregistrées ne sont pas encore joignables. La liste fonctionne quand même.</p>'; },10000);
+    const clear=()=>{ clearTimeout(timer); $("#notice").innerHTML=""; };
+    db.collection("visites").onSnapshot(s=>{ if(!s.metadata.fromCache) clear(); snapTo("visits",s); }, ()=>clear());
+    db.collection("envies").onSnapshot(s=>snapTo("envies",s), ()=>{});
+    db.collection("ajouts").onSnapshot(s=>snapTo("ajouts",s), ()=>{});
+    db.collection("horaires").onSnapshot(s=>snapTo("horaires",s), ()=>{});
+  }catch(e){ db=null; showNotice(); }
+})();
+function showNotice(){
+  if(gh) { $("#notice").innerHTML=""; return; }
+  $("#notice").innerHTML= state.mode==="db"? "" : '<p class="notice">Vos notes sont enregistrées dans ce navigateur seulement. Pour les partager entre vos téléphones, activez la <button class="linkbtn" data-sync>synchronisation GitHub</button>.</p>';
+}
+
+/* ---------- Synchronisation via un fichier GitHub (hors Claude) ---------- */
+const COLKEY={visites:"visits",envies:"envies",ajouts:"ajouts",horaires:"horaires"};
+const GHCFG="tables-marines-github";
+let gh=null, ghBusy=Promise.resolve(), ghLast=null;
+try{ gh=JSON.parse(localStorage.getItem(GHCFG)||"null"); }catch(e){ gh=null; }
+function ghStore(c){ gh=c; try{ c?localStorage.setItem(GHCFG,JSON.stringify(c)):localStorage.removeItem(GHCFG); }catch(e){} }
+const b64e=s=>{ const by=new TextEncoder().encode(s); let bin=""; for(let i=0;i<by.length;i+=0x8000) bin+=String.fromCharCode.apply(null,by.subarray(i,i+0x8000)); return btoa(bin); };
+const b64d=s=>{ const bin=atob(String(s).replace(/\s/g,"")); return new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0))); };
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function ghUrl(c){ return `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split("/").map(encodeURIComponent).join("/")}`; }
+function ghHeaders(c){ return {Authorization:`Bearer ${c.token}`, Accept:"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28"}; }
+async function ghGet(c){
+  const r=await fetch(`${ghUrl(c)}?ref=${encodeURIComponent(c.branch)}&_=${Date.now()}`,{headers:ghHeaders(c),cache:"no-store"});
+  if(r.status===404) return {data:null, sha:null};
+  if(!r.ok) throw Object.assign(new Error("GitHub "+r.status),{status:r.status});
+  const j=await r.json(); let data={};
+  try{ data=JSON.parse(b64d(j.content||"")||"{}"); }catch(e){ data={}; }
+  return {data, sha:j.sha};
+}
+async function ghPut(c,data,sha,msg){
+  const body={message:msg, content:b64e(JSON.stringify(data,null,1)), branch:c.branch}; if(sha) body.sha=sha;
+  const r=await fetch(ghUrl(c),{method:"PUT",headers:{...ghHeaders(c),"Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(!r.ok) throw Object.assign(new Error("GitHub "+r.status),{status:r.status});
+  return true;
+}
+const ghEmpty=()=>({visites:{},envies:{},ajouts:{},horaires:{}});
+function ghApply(d){ for(const [col,key] of Object.entries(COLKEY)) state[key]=(d&&d[col])||{}; saveLocal(); ghLast=new Date(); ghBadge(); render(); }
+function ghErrMsg(e){
+  if(!e||!e.status) return "Pas de connexion à GitHub : la modification n'a pas été enregistrée.";
+  if(e.status===401) return "Jeton GitHub refusé ou expiré : ouvrez « Synchro » pour le remplacer.";
+  if(e.status===403||e.status===404) return "Accès au dépôt GitHub refusé : vérifiez le dépôt et les droits du jeton.";
+  return "GitHub indisponible pour l'instant ("+e.status+").";
+}
+function ghName(col,id,doc){ const r=allR().find(x=>x.id===(doc&&doc.rid)||x.id===id); return (doc&&(doc.nom||doc.n))||(r&&r.n)||id; }
+function ghOp(col,id,doc){
+  const run=async()=>{
+    const label={visites:"Note",envies:"Envie",ajouts:"Ajout",horaires:"Horaires"}[col]||col;
+    const msg=`${doc===null?"Suppression · ":""}${label} : ${ghName(col,id,doc)}`;
+    for(let i=0;i<4;i++){
+      try{
+        const {data,sha}=await ghGet(gh);
+        const d={...ghEmpty(),...(data||{})};
+        d[col]={...(d[col]||{})};
+        if(doc===null) delete d[col][id]; else d[col][id]=doc;
+        await ghPut(gh,d,sha,msg);
+        ghApply(d); return true;
+      }catch(e){
+        if(e.status===409||e.status===422){ await sleep(500*(i+1)); continue; }
+        toast(ghErrMsg(e)); ghBadge(true); return false;
+      }
+    }
+    toast("L'autre téléphone enregistrait en même temps : réessayez."); return false;
+  };
+  const p=ghBusy.then(run); ghBusy=p.catch(()=>{}); return p;
+}
+function ghRefresh(){
+  if(!gh) return;
+  ghBusy=ghBusy.then(async()=>{ try{ const {data}=await ghGet(gh); if(data) ghApply(data); }catch(e){ ghBadge(true); } }).catch(()=>{});
+}
+async function ghActivate(c){
+  // fusionne ce qui est déjà dans ce navigateur avec le fichier GitHub
+  const {data,sha}=await ghGet(c);
+  const d={...ghEmpty(),...(data||{})}; let changed=!data;
+  for(const [col,key] of Object.entries(COLKEY)){
+    d[col]={...(d[col]||{})};
+    for(const [id,v] of Object.entries(state[key]||{})) if(!(id in d[col])){ d[col][id]=v; changed=true; }
+  }
+  if(changed) await ghPut(c,d,sha,data?"Fusion des notes d'un nouvel appareil":"Création du fichier de notes");
+  ghStore(c); ghApply(d); showNotice();
+}
+function ghBadge(err){
+  const b=$("#sync-btn"); if(!b) return;
+  b.hidden= state.mode==="db";
+  b.classList.toggle("on",!!gh&&!err); b.classList.toggle("err",!!err);
+  b.textContent= !gh? "Synchro : désactivée" : err? "Synchro : erreur" : "Synchro : activée";
+  b.title= gh&&ghLast? "Dernière mise à jour à "+ghLast.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}) : "";
+}
+function ghInit(){
+  const u=new URL(location.href), q=u.searchParams.get("sync");
+  if(q){
+    u.searchParams.delete("sync"); history.replaceState(null,"",u.pathname+u.search+u.hash);
+    try{ const c=JSON.parse(b64d(q)); if(c&&c.token&&c.owner&&c.repo){ ghActivate({branch:"main",path:"donnees.json",...c}).then(()=>toast("Synchronisation activée sur ce téléphone")).catch(e=>{ toast(ghErrMsg(e)); openSync(c); }); } }catch(e){ toast("Lien de connexion invalide."); }
+  } else if(gh){ ghRefresh(); }
+  ghBadge(); showNotice();
+  setInterval(()=>{ if(document.visibilityState==="visible") ghRefresh(); },45000);
+  document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") ghRefresh(); });
+}
+function openSync(pref){
+  const c={owner:"SheldonChbr", repo:"restaurants-marines-donnees", path:"donnees.json", branch:"main", token:"", ...(gh||{}), ...(pref||{})};
+  dlg.innerHTML=`<div class="mhead"><div class="kicker">Partage entre vos téléphones</div><h2 id="dlg-title">Synchronisation GitHub</h2></div>
+  <form class="mbody form" id="sync-form">
+    <p class="hhelp">Chaque note, envie ou horaire est enregistré dans un fichier de votre dépôt GitHub privé. Les deux téléphones lisent et modifient ce même fichier ; les changements de l'autre apparaissent en moins d'une minute.</p>
+    <div class="two"><label for="g-o">Compte GitHub<input type="text" id="g-o" value="${esc(c.owner)}" required autocomplete="off"></label>
+    <label for="g-r">Dépôt des données <span>privé</span><input type="text" id="g-r" value="${esc(c.repo)}" required autocomplete="off"></label></div>
+    <label for="g-t">Jeton d'accès <span>Contents : lecture et écriture sur ce dépôt</span><input type="password" id="g-t" value="${esc(c.token)}" required autocomplete="off" placeholder="github_pat_…"></label>
+    <details class="hdet"><summary>Options avancées</summary><div class="two" style="margin-top:8px"><label for="g-p">Fichier<input type="text" id="g-p" value="${esc(c.path)}"></label><label for="g-b">Branche<input type="text" id="g-b" value="${esc(c.branch)}"></label></div></details>
+    ${gh?`<p class="hhelp">Pour Claire : envoyez-lui ce lien une seule fois. Il contient le jeton, ne le partagez avec personne d'autre.</p><button type="button" class="btn ghost" id="g-link">Copier le lien de connexion</button>`:""}
+    <div class="mfoot" style="padding:0">
+      ${gh?`<button type="button" class="btn ghost" id="g-off">Désactiver ici</button>`:"<span></span>"}
+      <span style="display:flex;gap:8px"><button type="button" class="btn ghost" data-nav="close">Fermer</button><button class="btn primary" type="submit">${gh?"Enregistrer":"Activer"}</button></span>
+    </div>
+  </form>`;
+  dlg.showModal();
+  const f=dlg.querySelector("#sync-form");
+  const off=f.querySelector("#g-off"); if(off) off.addEventListener("click",()=>{ ghStore(null); ghBadge(); showNotice(); dlg.close(); toast("Synchronisation désactivée sur ce téléphone"); });
+  const lk=f.querySelector("#g-link"); if(lk) lk.addEventListener("click",async()=>{
+    const u=new URL(location.href); u.hash=""; u.search=""; u.searchParams.set("sync",b64e(JSON.stringify(gh)));
+    try{ await navigator.clipboard.writeText(u.toString()); toast("Lien copié : envoyez-le à Claire"); }catch(e){ prompt("Copiez ce lien :",u.toString()); }
+  });
+  f.addEventListener("submit",async e=>{
+    e.preventDefault(); const g=id=>f.querySelector(id).value.trim();
+    const nc={owner:g("#g-o"), repo:g("#g-r"), path:g("#g-p")||"donnees.json", branch:g("#g-b")||"main", token:g("#g-t")};
+    const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="Connexion…";
+    try{ await ghActivate(nc); dlg.close(); toast("Synchronisation activée"); }
+    catch(err){ btn.disabled=false; btn.textContent=gh?"Enregistrer":"Activer"; toast(ghErrMsg(err)); }
+  });
+}
+
+/* ---------- Agrégats ---------- */
+function stats(){
+  const by={};
+  for(const [vid,v] of Object.entries(state.visits)){
+    if(!v||!v.rid) continue;
+    (by[v.rid] ||= []).push({...v, vid});
+  }
+  const out={};
+  for(const [rid,list] of Object.entries(by)){
+    list.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+    const avg=list.reduce((s,x)=>s+(+x.score||0),0)/list.length;
+    out[rid]={avg:Math.round(avg*10)/10, list};
+  }
+  const ranked=Object.entries(out).sort((a,b)=>b[1].avg-a[1].avg);
+  ranked.forEach(([rid,o],i)=>o.rank=i+1);
+  return out;
+}
+
+/* ---------- Rendu liste ---------- */
+function initFilters(){
+  const box=$("#styles");
+  box.innerHTML=Object.entries(STYLES).map(([k,l])=>`<button class="chip" data-s="${k}" aria-pressed="false">${esc(l)}</button>`).join("");
+  box.addEventListener("click",e=>{ const b=e.target.closest(".chip"); if(!b) return; const k=b.dataset.s; ui.styles.has(k)?ui.styles.delete(k):ui.styles.add(k); b.setAttribute("aria-pressed",ui.styles.has(k)); render(); });
+  const zones=[...new Set(R.map(r=>r.z))];
+  $("#zone").insertAdjacentHTML("beforeend",zones.map(z=>`<option>${esc(z)}</option>`).join(""));
+  ["q","tmax","pmax","sort","zone","f-todo","f-envie","f-soir","f-unk","f-vol"].forEach(id=>$("#"+id).addEventListener("input",render));
+  $("#reset").addEventListener("click",()=>{ $("#q").value=""; $("#tmax").value=55; $("#pmax").value=PMAX; $("#sort").value="t"; $("#zone").value=""; $("#f-soir").value=""; ["f-todo","f-envie","f-unk","f-vol"].forEach(i=>$("#"+i).checked=false); ui.styles.clear(); document.querySelectorAll("#styles .chip").forEach(c=>c.setAttribute("aria-pressed","false")); render(); });
+}
+function render(){
+  const st=stats();
+  const list=allR();
+  $("#tmax-v").textContent= +$("#tmax").value>=55? "tout" : $("#tmax").value+" min";
+  $("#pmax-v").textContent= +$("#pmax").value>=PMAX? "tout" : $("#pmax").value+" €";
+  const q=$("#q").value.trim().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"");
+  const tmax=+$("#tmax").value, pmax=+$("#pmax").value, zone=$("#zone").value;
+  const todo=$("#f-todo").checked, envie=$("#f-envie").checked, soir=$("#f-soir").value, unk=$("#f-unk").checked, novol=$("#f-vol").checked;
+  let rows=list.filter(r=>{
+    if(tmax<55 && r.t>tmax) return false;
+    if(pmax<PMAX && r.p>pmax) return false;
+    if(novol && r.vol) return false;
+    if(soir){ const st8=soirState(r,soir); if(st8==="off") return false; if(st8==="unk" && !unk) return false; }
+    if(zone && r.z!==zone) return false;
+    if(ui.styles.size && ![...ui.styles].every(s=>(r.s||[]).includes(s))) return false;
+    if(todo && st[r.id]) return false;
+    if(envie && !(state.envies[r.id]&&state.envies[r.id].on)) return false;
+    if(q){ const hay=[r.n,r.v,r.z,r.a,r.w,r.g,(r.s||[]).map(s=>STYLES[s]).join(" ")].join(" ").toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,""); if(!hay.includes(q)) return false; }
+    return true;
+  });
+  const sort=$("#sort").value;
+  rows.sort((a,b)=>{
+    if(sort==="p") return a.p-b.p || a.t-b.t;
+    if(sort==="n") return a.n.localeCompare(b.n,"fr");
+    if(sort==="note"){ const sa=st[a.id]?st[a.id].avg:-1, sb=st[b.id]?st[b.id].avg:-1; return sb-sa || a.t-b.t; }
+    return a.t-b.t || a.p-b.p;
+  });
+  $("#n-liste").textContent=list.length;
+  $("#n-class").textContent=Object.keys(st).length;
+  $("#count").textContent=`${rows.length} adresse${rows.length>1?"s":""} sur ${list.length}`;
+  $("#grid").innerHTML = rows.length? rows.map(r=>card(r,st[r.id])).join("") : `<div class="empty">Aucune adresse avec ces filtres. Élargissez le trajet ou le budget.</div>`;
+  renderRank(st);
+}
+const DAYS=[["lu","L","lundi"],["ma","M","mardi"],["me","M","mercredi"],["je","J","jeudi"],["ve","V","vendredi"],["sa","S","samedi"],["di","D","dimanche"]];
+function soirState(r,day){
+  if(!Array.isArray(r.soirs)) return "unk";
+  if(r.soirs.includes(day)) return "on";
+  return r.ps? "unk" : "off";
+}
+function pillRow(label,list,r,partial){
+  return `<span class="lbl">${label}</span><span class="days">${DAYS.map(([k,l,full])=>{ const st=list.includes(k)?"on":partial?"unk":"off"; const t=st==="on"?"ouvert":st==="off"?"fermé":"à vérifier"; return `<span class="day ${st}" title="${full} ${label.toLowerCase()} : ${t}" aria-label="${full} ${label.toLowerCase()} : ${t}">${l}</span>`; }).join("")}</span>`;
+}
+function soirsHtml(r){
+  if(!Array.isArray(r.soirs)) return `<div class="soirs"><span class="lbl">Soirs</span><span class="unk-txt">à vérifier</span><button class="linkbtn edit-h" data-hours="${esc(r.id)}">Renseigner</button></div>`;
+  const mark=r.userH?`<span class="chk mine" title="Horaires saisis par vous${r.userH.date?" le "+esc(r.userH.date):""}">✎ saisi par vous</span>`:r.hv?`<span class="chk" title="Horaires recoupés sur une source récente (novembre 2026)">✓ vérifié</span>`:"";
+  const btn=`<button class="linkbtn edit-h" data-hours="${esc(r.id)}">Modifier</button>`;
+  if(r.userH&&r.userH.jours){
+    const J=r.userH.jours;
+    const rows=DAYS.map(([k,,full])=>{ const j=J[k]||{}; const m=j.m?(j.m===true?"ouvert":esc(j.m)):"—", so=j.s?(j.s===true?"ouvert":esc(j.s)):"—";
+      return `<tr${!j.m&&!j.s?' class="closed"':""}><th>${full}</th><td>${!j.m&&!j.s?"fermé":m}</td><td>${!j.m&&!j.s?"":so}</td></tr>`; }).join("");
+    return `<div class="soirs">${pillRow("Midis",r.midis||[],r,false)}${mark}${btn}</div>
+      <div class="soirs">${pillRow("Soirs",r.soirs,r,false)}</div>
+      <details class="hdet"><summary>Horaires jour par jour</summary><table class="htab"><thead><tr><th></th><th>Midi</th><th>Soir</th></tr></thead><tbody>${rows}</tbody></table></details>`;
+  }
+  return `<div class="soirs">${pillRow("Soirs",r.soirs,r,r.ps)}${mark}${btn}</div>`;
+}
+function card(r,s){
+  const tags=(r.s||[]).map(k=>`<span class="tag${k==="PP"?" pp":""}">${esc(STYLES[k])}</span>`).join("")
+    + (r.star?`<span class="tag star">${"★".repeat(r.star)} Michelin</span>`:"")
+    + (r.vol?`<span class="tag vol">À volonté</span>`:"");
+  const env=state.envies[r.id]&&state.envies[r.id].on;
+  const dimTxt = soirsHtml(r);
+  let badge="";
+  if(s){ const [vl,vc]=verdict(s.avg); badge=`<span class="badge ${vc}">N°${s.rank} · ${vl}${s.list.length>1?` · ${s.list.length} visites`:""}</span>`; }
+  else if(r.ref){ badge=`<span class="badge" style="color:var(--brass);border-color:var(--brass)">Votre référence</span>`; }
+  else if(r.liked){ badge=`<span class="badge" style="color:var(--brass);border-color:var(--brass)">Déjà aimé</span>`; }
+  const dest=encodeURIComponent(r.n.replace(/\(.*?\)/g,"")+" "+r.v);
+  return `<article class="card${s?" tested":""}${(r.ref||r.liked)&&!s?" ref":""}">
+    <div class="price">${tier(r.p)}<small>~${r.p} €/pers</small></div>
+    <h3>${esc(r.n)}</h3>
+    <div class="where"><span class="time">⏱ ${r.t} min</span><span>${esc(r.v)}</span><span>· ${esc(r.z)}</span></div>
+    ${badge}
+    <div class="tags">${tags}</div>
+    ${r.a?`<p class="amb">${esc(r.a)}</p>`:""}
+    ${r.w?`<p class="why">${esc(r.w)}</p>`:""}
+    <div class="info">${dimTxt}${r.h?`<span>${esc(r.h)}</span>`:""}${r.g?`<span>${esc(r.g)}</span>`:""}</div>
+    <div class="actions">
+      <button class="btn primary" data-rate="${esc(r.id)}">${s?"Noter une nouvelle visite":"On l'a testé : noter"}</button>
+      <button class="btn heart" data-envie="${esc(r.id)}" aria-pressed="${env?"true":"false"}" aria-label="Ajouter à nos envies">${env?"♥":"♡"}</button>
+      <a href="https://www.google.com/maps/dir/?api=1&origin=Marines%2095640&destination=${dest}" target="_blank" rel="noopener">Trajet ↗</a>
+      ${r.custom?`<button class="linkbtn" data-delr="${esc(r.id)}">Retirer</button>`:""}
+    </div>
+  </article>`;
+}
+
+/* ---------- Classement ---------- */
+function renderRank(st){
+  const show=$("#show-scores").checked;
+  const byId=Object.fromEntries(allR().map(r=>[r.id,r]));
+  const ranked=Object.entries(st).sort((a,b)=>a[1].rank-b[1].rank);
+  $("#rank-count").textContent= ranked.length? `${ranked.length} restaurant${ranked.length>1?"s":""} testé${ranked.length>1?"s":""}` : "";
+  if(!ranked.length){ $("#rank").innerHTML=`<div class="empty">Pas encore de restaurant noté. Après votre prochaine sortie, cliquez sur « On l'a testé : noter » sur sa fiche. Astuce : commencez par Le Loft, votre référence.</div>`; return; }
+  $("#rank").innerHTML=ranked.map(([rid,o])=>{
+    const r=byId[rid]||{n:o.list[0].nom||rid, v:o.list[0].ville||""};
+    const [vl,vc]=verdict(o.avg);
+    const last=o.list[0];
+    const likes=[...new Set(o.list.flatMap(x=>(x.ans&&x.ans.aime)||[]))].map(t=>`<span class="tag plus">+ ${esc(t)}</span>`).join("");
+    const dislikes=[...new Set(o.list.flatMap(x=>(x.ans&&x.ans.moins)||[]))].filter(t=>t!=="Rien à redire").map(t=>`<span class="tag minus">− ${esc(t)}</span>`).join("");
+    const visits=o.list.map(x=>`<div class="visit"><span>${x.date?new Date(x.date+"T12:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}):"Date ?"}</span>${x.paye?`<span>· ${esc(x.paye)} € à deux</span>`:""}${show?`<span>· ${x.score}/100</span>`:""}<button class="linkbtn" data-delv="${esc(x.vid)}">Supprimer</button></div>`).join("");
+    return `<div class="rrow">
+      <div class="pos${o.rank<=3?" p"+o.rank:""}">${o.rank}</div>
+      <div>
+        <h3>${esc(r.n)}</h3>
+        <div class="sub">${esc(r.v)}${r.t?` · ${r.t} min`:""}${r.p?` · ~${r.p} €/pers`:""}</div>
+        ${(likes||dislikes)?`<div class="liked">${likes}${dislikes}</div>`:""}
+        ${last.plat?`<p class="com"><b>Plat coup de cœur :</b> ${esc(last.plat)}</p>`:""}
+        ${last.com?`<p class="com">« ${esc(last.com)} »</p>`:""}
+        <div class="visits">${visits}</div>
+      </div>
+      <div class="side"><span class="badge ${vc}">${vl}</span>${show?`<span class="score">${o.avg}/100</span>`:""}<button class="btn" data-rate="${esc(rid)}">Y retourner et noter</button></div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- Questionnaire ---------- */
+const dlg=$("#dlg");
+let cur=null;
+function openRate(rid){
+  const r=allR().find(x=>x.id===rid); if(!r) return;
+  const qs=Q.filter(q=>q.notFor!==rid);
+  cur={r, qs, i:0, ans:{aime:[],moins:[]}, date:new Date().toISOString().slice(0,10), paye:"", plat:"", com:""};
+  drawStep(); dlg.showModal();
+}
+function drawStep(){
+  const {r,qs,i}=cur; const qq=qs[i];
+  const pct=Math.round(i/(qs.length-1)*100);
+  let body="", foot="";
+  if(qq.final){
+    body=`<h4>Pour s'en souvenir</h4>
+      <div class="form">
+        <div class="two">
+          <label for="f-date">Date de la sortie<input type="date" id="f-date" value="${esc(cur.date)}"></label>
+          <label for="f-paye">Addition à deux <span>en €, optionnel</span><input type="number" id="f-paye" min="0" step="1" inputmode="numeric" value="${esc(cur.paye)}"></label>
+        </div>
+        <label for="f-plat">Plat coup de cœur <span>optionnel</span><input type="text" id="f-plat" value="${esc(cur.plat)}" placeholder="Ex. le paleron confit"></label>
+        <label for="f-com">Un mot sur la soirée <span>optionnel</span><textarea id="f-com" placeholder="Ce qu'on retiendra…">${esc(cur.com)}</textarea></label>
+      </div>`;
+    foot=`<button class="btn ghost" data-nav="prev">← Retour</button><button class="btn primary" data-nav="save">Enregistrer et voir le classement</button>`;
+  } else if(qq.multi){
+    const sel=cur.ans[qq.k]||[];
+    body=`<h4>${esc(qq.q)}</h4><div class="multi">${qq.o.map(o=>`<button class="chip" data-m="${esc(o)}" aria-pressed="${sel.includes(o)}">${esc(o)}</button>`).join("")}</div>`;
+    foot=`<button class="btn ghost" data-nav="prev">← Retour</button><button class="btn primary" data-nav="next">Continuer →</button>`;
+  } else {
+    const a=cur.ans[qq.k];
+    body=`<h4>${esc(qq.q)}</h4><div class="opts">${qq.o.map((o,j)=>`<button class="opt" data-a="${j}" aria-pressed="${a===j}">${esc(o[0])}</button>`).join("")}${qq.skip?`<button class="opt skip" data-a="skip" aria-pressed="${a==="skip"}">${esc(qq.skip)}</button>`:""}</div>`;
+    foot= i>0?`<button class="btn ghost" data-nav="prev">← Retour</button><span></span>`:`<button class="btn ghost" data-nav="close">Annuler</button><span></span>`;
+  }
+  dlg.innerHTML=`<div class="mhead"><div class="kicker">Question ${Math.min(i+1,qs.length-1)} sur ${qs.length-1}</div><h2 id="dlg-title">${esc(r.n)}</h2><div class="prog"><i style="width:${pct}%"></i></div></div>
+    <div class="mbody">${body}</div><div class="mfoot">${foot}</div>`;
+  const first=dlg.querySelector(".opt[aria-pressed='true'], .opt, .chip, input"); if(first) first.focus({preventScroll:true});
+}
+function keepFinal(){ const g=id=>dlg.querySelector(id); if(g("#f-date")){ cur.date=g("#f-date").value; cur.paye=g("#f-paye").value; cur.plat=g("#f-plat").value.trim(); cur.com=g("#f-com").value.trim(); } }
+dlg.addEventListener("click", async e=>{
+  if(e.target===dlg){ dlg.close(); return; }
+  const o=e.target.closest(".opt");
+  if(o&&cur){ const qq=cur.qs[cur.i]; cur.ans[qq.k]= o.dataset.a==="skip"?"skip":+o.dataset.a; cur.i++; drawStep(); return; }
+  const m=e.target.closest(".chip[data-m]");
+  if(m&&cur){ const qq=cur.qs[cur.i]; const arr=cur.ans[qq.k]||(cur.ans[qq.k]=[]); const v=m.dataset.m;
+    if(v==="Rien à redire"){ cur.ans[qq.k]= arr.includes(v)?[]:[v]; }
+    else { const ix=arr.indexOf(v); ix>=0?arr.splice(ix,1):arr.push(v); const rr=arr.indexOf("Rien à redire"); if(rr>=0) arr.splice(rr,1); }
+    drawStep(); return; }
+  const n=e.target.closest("[data-nav]"); if(!n) return;
+  const act=n.dataset.nav;
+  if(act==="close"){ dlg.close(); return; }
+  if(!cur) return;
+  if(act==="prev"){ keepFinal(); cur.i=Math.max(0,cur.i-1); drawStep(); return; }
+  if(act==="next"){ cur.i++; drawStep(); return; }
+  if(act==="save"){
+    keepFinal(); n.disabled=true;
+    const score=computeScore(cur.ans);
+    const vid="v"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    const doc={rid:cur.r.id, nom:cur.r.n, ville:cur.r.v, date:cur.date||new Date().toISOString().slice(0,10), ans:cur.ans, score, paye:cur.paye||"", plat:cur.plat||"", com:cur.com||"", ts:Date.now()};
+    state.visits[vid]=doc;
+    const ok=await put("visites",vid,doc);
+    if(!ok){ delete state.visits[vid]; n.disabled=false; return; }
+    const st=stats(); const s=st[cur.r.id]; const [vl]=verdict(s.avg); const total=Object.keys(st).length;
+    dlg.innerHTML=`<div class="mhead"><div class="kicker">C'est noté</div><h2 id="dlg-title">${esc(cur.r.n)}</h2><div class="prog"><i style="width:100%"></i></div></div>
+      <div class="mbody done"><div class="big">N°${s.rank}</div><p>sur ${total} restaurant${total>1?"s":""} testé${total>1?"s":""} · <b>${esc(vl)}</b></p></div>
+      <div class="mfoot"><button class="btn ghost" data-nav="close">Fermer</button><button class="btn primary" id="go-rank">Voir le classement</button></div>`;
+    dlg.querySelector("#go-rank").addEventListener("click",()=>{ dlg.close(); location.hash="classement"; });
+    render();
+  }
+});
+
+/* ---------- Saisie des horaires ---------- */
+function parseRange(v){ if(!v||v===true) return ["",""]; const m=String(v).match(/(\d{1,2}:\d{2})\D+(\d{1,2}:\d{2})/); return m?[m[1].padStart(5,"0"),m[2].padStart(5,"0")]:["",""]; }
+function openHours(id){
+  const r=allR().find(x=>x.id===id); if(!r) return;
+  const base=R.find(x=>x.id===id)||state.ajouts[id]||r;
+  const o=state.horaires[id];
+  // pré-remplissage : saisie existante, sinon soirs connus de la liste
+  const J={};
+  DAYS.forEach(([k])=>{
+    if(o&&o.jours){ J[k]=o.jours[k]||{}; }
+    else { J[k]={ s: Array.isArray(r.soirs)&&r.soirs.includes(k) ? true : "" , m:"" }; }
+  });
+  const svc=(k,t,def)=>{ const v=J[k][t]; const on=!!v; const [a,b]=on?parseRange(v):["",""]; const [da,db]=def;
+    return `<div class="svc"><label class="ck"><input type="checkbox" data-k="${k}" data-t="${t}"${on?" checked":""}> ${t==="m"?"Midi":"Soir"}</label>
+      <input type="time" data-k="${k}" data-t="${t}" data-p="a" value="${a||(on?"":"")}" placeholder="${da}" aria-label="${t==="m"?"Midi":"Soir"} début"${on?"":" disabled"}>
+      <span class="sep">–</span>
+      <input type="time" data-k="${k}" data-t="${t}" data-p="b" value="${b}" placeholder="${db}" aria-label="${t==="m"?"Midi":"Soir"} fin"${on?"":" disabled"}></div>`; };
+  dlg.innerHTML=`<div class="mhead"><div class="kicker">${esc(r.n)} · ${esc(r.v)}</div><h2 id="dlg-title">Horaires d'ouverture</h2></div>
+  <form class="mbody form" id="h-form">
+    <p class="hhelp">Cochez midi et/ou soir pour chaque jour et indiquez les heures (facultatif). Un jour sans rien de coché = fermé. Vos horaires remplacent ceux de la liste, sur tous vos appareils.</p>
+    ${base.h?`<p class="hhelp">Info d'origine : ${esc(base.h)}</p>`:""}
+    <div class="hrows">${DAYS.map(([k,,full])=>`<div class="hrow"><div class="dname">${full}</div>${svc(k,"m",["12:00","14:00"])}${svc(k,"s",["19:00","22:00"])}</div>`).join("")}</div>
+    <button type="button" class="btn ghost" id="h-copy">Copier les horaires du lundi sur tous les jours ouverts</button>
+    <label for="h-note">Remarque <span>optionnel</span><input type="text" id="h-note" value="${esc(o?o.h||"":"")}" placeholder="Ex. fermé en août, réservation conseillée le samedi"></label>
+    <div class="mfoot" style="padding:0">
+      ${o?`<button type="button" class="btn ghost" id="h-reset">Horaires d'origine</button>`:"<span></span>"}
+      <span style="display:flex;gap:8px"><button type="button" class="btn ghost" data-nav="close">Annuler</button><button class="btn primary" type="submit">Enregistrer</button></span>
+    </div>
+  </form>`;
+  dlg.showModal();
+  const f=dlg.querySelector("#h-form");
+  const times=(k,t)=>[...f.querySelectorAll(`input[type="time"][data-k="${k}"][data-t="${t}"]`)];
+  f.addEventListener("change",e=>{
+    const c=e.target; if(c.type!=="checkbox") return;
+    const [a,b]=times(c.dataset.k,c.dataset.t); a.disabled=b.disabled=!c.checked;
+    if(c.checked && !a.value && !b.value){ a.value=c.dataset.t==="m"?"12:00":"19:00"; b.value=c.dataset.t==="m"?"14:00":"22:00"; }
+  });
+  f.querySelector("#h-copy").addEventListener("click",()=>{
+    ["m","s"].forEach(t=>{ const [a,b]=times("lu",t); const on=f.querySelector(`input[type="checkbox"][data-k="lu"][data-t="${t}"]`).checked;
+      if(!on) return;
+      DAYS.slice(1).forEach(([k])=>{ const c=f.querySelector(`input[type="checkbox"][data-k="${k}"][data-t="${t}"]`); if(!c.checked) return; const [x,y]=times(k,t); x.value=a.value; y.value=b.value; }); });
+    toast("Horaires du lundi copiés sur les jours cochés");
+  });
+  const rs=f.querySelector("#h-reset");
+  if(rs) rs.addEventListener("click", async ()=>{
+    const keep=state.horaires[id]; delete state.horaires[id]; render();
+    const ok=await del("horaires",id); if(!ok){ state.horaires[id]=keep; render(); return; }
+    dlg.close(); toast("Horaires d'origine rétablis");
+  });
+  f.addEventListener("submit", async e=>{
+    e.preventDefault();
+    const jours={};
+    DAYS.forEach(([k])=>{ jours[k]={};
+      ["m","s"].forEach(t=>{ const c=f.querySelector(`input[type="checkbox"][data-k="${k}"][data-t="${t}"]`); if(!c.checked){ jours[k][t]=""; return; }
+        const [a,b]=times(k,t); jours[k][t]= a.value&&b.value? `${a.value}–${b.value}` : a.value? `dès ${a.value}` : true; }); });
+    const doc={jours, h:f.querySelector("#h-note").value.trim(), date:new Date().toISOString().slice(0,10), ts:Date.now()};
+    const prev=state.horaires[id]; state.horaires[id]=doc; render();
+    const ok=await put("horaires",id,doc);
+    if(!ok){ if(prev) state.horaires[id]=prev; else delete state.horaires[id]; render(); return; }
+    dlg.close(); toast("Horaires enregistrés");
+  });
+}
+
+/* ---------- Ajout d'un restaurant ---------- */
+function openAdd(){
+  dlg.innerHTML=`<div class="mhead"><div class="kicker">Nouvelle adresse</div><h2 id="dlg-title">Ajouter un restaurant</h2></div>
+  <form class="mbody form" id="add-form">
+    <label for="a-n">Nom<input type="text" id="a-n" required></label>
+    <div class="two"><label for="a-v">Ville<input type="text" id="a-v" required></label>
+    <label for="a-z">Secteur<select id="a-z">${[...new Set(R.map(r=>r.z))].map(z=>`<option>${esc(z)}</option>`).join("")}<option>Autre</option></select></label></div>
+    <div class="two"><label for="a-t">Trajet <span>en minutes</span><input type="number" id="a-t" min="5" max="120" value="30" required></label>
+    <label for="a-p">Prix moyen <span>€ par personne</span><input type="number" id="a-p" min="5" max="300" value="35" required></label></div>
+    <label for="a-s">Style<select id="a-s">${Object.entries(STYLES).map(([k,l])=>`<option value="${k}">${esc(l)}</option>`).join("")}</select></label>
+    <label for="a-w">Pourquoi on veut y aller <span>optionnel</span><input type="text" id="a-w"></label>
+    <div class="mfoot" style="padding:0"><button type="button" class="btn ghost" data-nav="close">Annuler</button><button class="btn primary" type="submit">Ajouter</button></div>
+  </form>`;
+  dlg.showModal();
+  dlg.querySelector("#add-form").addEventListener("submit", async e=>{
+    e.preventDefault(); const g=id=>dlg.querySelector(id).value.trim();
+    const id="perso-"+Date.now().toString(36);
+    const doc={id, n:g("#a-n"), v:g("#a-v"), z:g("#a-z"), t:+g("#a-t")||30, p:+g("#a-p")||35, s:[g("#a-s")], a:"", w:g("#a-w"), g:"Ajouté par vous", soirs:null};
+    state.ajouts[id]=doc; const ok=await put("ajouts",id,doc);
+    if(!ok){ delete state.ajouts[id]; return; }
+    dlg.close(); toast("Restaurant ajouté"); render();
+  });
+}
+
+/* ---------- Événements globaux ---------- */
+document.addEventListener("click", async e=>{
+  const rate=e.target.closest("[data-rate]"); if(rate){ openRate(rate.dataset.rate); return; }
+  const env=e.target.closest("[data-envie]");
+  if(env){ const id=env.dataset.envie; const on=!(state.envies[id]&&state.envies[id].on);
+    state.envies[id]={on}; render(); const ok= on? await put("envies",id,{on:true}) : await del("envies",id);
+    if(!ok){ state.envies[id]={on:!on}; render(); } else if(!on){ delete state.envies[id]; } return; }
+  const dv=e.target.closest("[data-delv]");
+  if(dv){ const id=dv.dataset.delv; const keep=state.visits[id]; delete state.visits[id]; render();
+    const ok=await del("visites",id); if(!ok){ state.visits[id]=keep; render(); } else toast("Visite supprimée"); return; }
+  const dr=e.target.closest("[data-delr]");
+  if(dr){ const id=dr.dataset.delr; const keep=state.ajouts[id]; delete state.ajouts[id]; render();
+    const ok=await del("ajouts",id); if(!ok){ state.ajouts[id]=keep; render(); } return; }
+  if(e.target.closest("#add-btn")){ openAdd(); return; }
+  if(e.target.closest("[data-sync]")){ openSync(); return; }
+  const hb=e.target.closest("[data-hours]"); if(hb){ openHours(hb.dataset.hours); return; }
+  const tab=e.target.closest(".tab"); if(tab){ location.hash=tab.dataset.view; }
+  if(e.target.closest("[data-nav='close']")&&dlg.open){ dlg.close(); }
+});
+$("#show-scores").addEventListener("input",()=>renderRank(stats()));
+function route(){
+  const v= location.hash==="#classement"?"classement":"liste";
+  ui.view=v;
+  $("#view-liste").hidden= v!=="liste";
+  $("#view-classement").hidden= v!=="classement";
+  $("#tab-liste").setAttribute("aria-selected", v==="liste");
+  $("#tab-classement").setAttribute("aria-selected", v==="classement");
+}
+window.addEventListener("hashchange",route);
+initFilters(); route(); render();
+</script>
+</body>
+</html>
