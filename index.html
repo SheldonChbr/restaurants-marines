@@ -52,6 +52,8 @@ header.top{padding:26px 0 12px}
 header.top h1{font-family:var(--display);font-weight:400;font-size:clamp(26px,4vw,36px);margin:0;text-wrap:balance;letter-spacing:-.01em}
 header.top p{margin:4px 0 0;color:var(--muted);max-width:70ch}
 .tabs{display:flex;gap:6px;margin-top:16px;flex-wrap:wrap}
+.tablist{display:flex;gap:6px;flex-wrap:wrap}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .tab{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600}
 .tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .tab .n{font-variant-numeric:tabular-nums;opacity:.7;margin-left:4px}
@@ -89,6 +91,7 @@ input[type="range"]{accent-color:var(--accent);width:130px}
 .amb{font-size:14px}
 .why{font-size:14px;color:var(--muted)}
 .info{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;display:grid;gap:2px}
+.info .paid{color:var(--ink);font-weight:600}
 .info .dim-no{color:var(--bad)}
 .info .dim-yes{color:var(--good)}
 .soirs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px}
@@ -96,7 +99,7 @@ input[type="range"]{accent-color:var(--accent);width:130px}
 .soirs .days{display:inline-flex;gap:3px}
 .soirs .day{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:5px;font-size:11px;font-weight:700;border:1px solid var(--line);color:var(--muted)}
 .soirs .day.on{background:var(--good);border-color:var(--good);color:var(--bg)}
-.soirs .day.off{opacity:.45;text-decoration:line-through}
+.soirs .day.off{opacity:.6;text-decoration:line-through}
 .soirs .day.unk{border-style:dashed}
 .soirs .unk-txt{font-style:italic}
 .soirs .chk{font-size:11.5px;color:var(--good);font-weight:600}
@@ -182,6 +185,13 @@ dialog::backdrop{background:rgba(10,12,11,.55)}
 .form label{display:grid;gap:4px;font-size:14px;font-weight:600}
 .form label span{font-weight:400;color:var(--muted);font-size:13px}
 .form textarea{min-height:70px;resize:vertical}
+.form fieldset{border:0;margin:0;padding:0;display:grid;gap:6px}
+.form legend{font-size:14px;font-weight:600;padding:0;margin-bottom:6px}
+.form legend span{font-weight:400;color:var(--muted);font-size:13px}
+.ckchips{display:flex;flex-wrap:wrap;gap:6px}
+.form .ckchips label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:13px;font-weight:500;cursor:pointer}
+.form .ckchips label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.ckchips input{accent-color:var(--accent)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .done{text-align:center;padding:10px 0}
 .done .big{font-family:var(--display);font-size:42px;color:var(--accent);line-height:1}
@@ -220,15 +230,17 @@ footer p{margin:4px 0;max-width:90ch}
   <header class="top">
     <h1>Nos tables autour de Marines</h1>
     <p>Une sélection d'adresses de 15 à 60 min de la maison : bistrots Pas Parisiens, terroir et fait maison, italiens et japonais (pas de buffet asiatique à volonté : les deux exceptions, Hoki Sushi et Sushi Club, sont signalées « À volonté »), tables chic sans se ruiner. Après chaque sortie, on répond au questionnaire et le classement se met à jour tout seul.</p>
-    <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="tab-liste" aria-selected="true" data-view="liste">Restaurants <span class="n" id="n-liste"></span></button>
-      <button class="tab" role="tab" id="tab-classement" aria-selected="false" data-view="classement">Notre classement <span class="n" id="n-class"></span></button>
+    <div class="tabs">
+      <div class="tablist" role="tablist" aria-label="Affichage">
+        <button class="tab" role="tab" id="tab-liste" aria-selected="true" aria-controls="view-liste" tabindex="0" data-view="liste">Restaurants <span class="n" id="n-liste"></span></button>
+        <button class="tab" role="tab" id="tab-classement" aria-selected="false" aria-controls="view-classement" tabindex="-1" data-view="classement">Notre classement <span class="n" id="n-class"></span></button>
+      </div>
       <button class="sync-btn" id="sync-btn" data-sync hidden>Synchro : désactivée</button>
     </div>
   </header>
 </div>
 
-<section id="view-liste">
+<section id="view-liste" role="tabpanel" aria-labelledby="tab-liste">
   <div class="filters">
     <div class="wrap">
       <div class="frow main">
@@ -249,7 +261,7 @@ footer p{margin:4px 0;max-width:90ch}
         </label>
       </div>
       <div class="frow">
-        <div class="chips" id="styles" aria-label="Styles"></div>
+        <div class="chips" id="styles" role="group" aria-label="Styles de cuisine"></div>
       </div>
       <div class="frow">
         <label class="field" for="zone">Secteur
@@ -273,13 +285,15 @@ footer p{margin:4px 0;max-width:90ch}
   </div>
   <div class="wrap">
     <div id="notice"></div>
-    <div class="meta-line"><span id="count"></span><button class="btn" id="add-btn">+ Ajouter un restaurant</button></div>
+    <h2 class="sr-only">Liste des restaurants</h2>
+    <div class="meta-line"><span id="count" role="status" aria-live="polite"></span><button class="btn" id="add-btn">+ Ajouter un restaurant à la main</button></div>
     <div class="grid" id="grid"></div>
   </div>
 </section>
 
-<section id="view-classement" hidden>
+<section id="view-classement" role="tabpanel" aria-labelledby="tab-classement" hidden>
   <div class="wrap">
+    <h2 class="sr-only">Notre classement</h2>
     <div class="meta-line" style="margin-top:6px">
       <span id="rank-count"></span>
       <label class="toggle"><input type="checkbox" id="show-scores"> Afficher les scores</label>
@@ -636,8 +650,12 @@ let db=null;
 const $ = s=>document.querySelector(s);
 const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const tier = p=> p<30?"€":p<45?"€€":p<70?"€€€":"€€€€";
+// Horaires revérifiés le 15/11/2026 : pour les adresses de la liste, les saisies manuelles
+// antérieures à cette date sont ignorées (elles restent dans le fichier mais ne s'affichent plus).
+const HORAIRES_MAJ=Date.parse("2026-11-15T21:30:00+01:00");
+function userHours(id){ const o=state.horaires[id]; if(!o) return null; if(R.some(x=>x.id===id) && !(+o.ts>=HORAIRES_MAJ)) return null; return o; }
 function withHours(r){
-  const o=state.horaires[r.id]; if(!o) return r;
+  const o=userHours(r.id); if(!o) return r;
   if(o.jours){ const soirs=DAYS.map(d=>d[0]).filter(k=>o.jours[k]&&o.jours[k].s); const midis=DAYS.map(d=>d[0]).filter(k=>o.jours[k]&&o.jours[k].m);
     return {...r, soirs, midis, ps:false, hv:false, h:o.h||"", userH:o, origH:r.h}; }
   if(Array.isArray(o.soirs)) return {...r, soirs:o.soirs, ps:false, hv:false, h:o.h||"", userH:o, origH:r.h};
@@ -801,6 +819,8 @@ function openSync(pref){
 }
 
 /* ---------- Agrégats ---------- */
+// prix payé par personne ; les anciennes notes enregistraient l'addition à deux
+function paidPP(x){ if(x.pp!==""&&x.pp!=null&&!isNaN(+x.pp)) return +x.pp; if(x.paye!==""&&x.paye!=null&&!isNaN(+x.paye)) return +x.paye/2; return null; }
 function stats(){
   const by={};
   for(const [vid,v] of Object.entries(state.visits)){
@@ -811,7 +831,8 @@ function stats(){
   for(const [rid,list] of Object.entries(by)){
     list.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
     const avg=list.reduce((s,x)=>s+(+x.score||0),0)/list.length;
-    out[rid]={avg:Math.round(avg*10)/10, list};
+    const pays=list.map(paidPP).filter(x=>x!=null);
+    out[rid]={avg:Math.round(avg*10)/10, list, paid: pays.length? Math.round(pays.reduce((a,b)=>a+b,0)/pays.length) : null};
   }
   const ranked=Object.entries(out).sort((a,b)=>b[1].avg-a[1].avg);
   ranked.forEach(([rid,o],i)=>o.rank=i+1);
@@ -834,6 +855,8 @@ function render(){
   const list=allR();
   $("#tmax-v").textContent= +$("#tmax").value>=TMAX? "tout" : $("#tmax").value+" min";
   $("#pmax-v").textContent= +$("#pmax").value>=PMAX? "tout" : $("#pmax").value+" €";
+  $("#tmax").setAttribute("aria-valuetext", +$("#tmax").value>=TMAX? "sans limite" : $("#tmax").value+" minutes");
+  $("#pmax").setAttribute("aria-valuetext", +$("#pmax").value>=PMAX? "sans limite" : $("#pmax").value+" euros par personne");
   const q=$("#q").value.trim().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"");
   const tmax=+$("#tmax").value, pmax=+$("#pmax").value, zone=$("#zone").value;
   const todo=$("#f-todo").checked, envie=$("#f-envie").checked, soir=$("#f-soir").value, unk=$("#f-unk").checked, novol=$("#f-vol").checked;
@@ -872,12 +895,14 @@ function soirState(r,day){
   return r.ps? "unk" : "off";
 }
 function pillRow(label,list,r,partial){
-  return `<span class="lbl">${label}</span><span class="days">${DAYS.map(([k,l,full])=>{ const st=list.includes(k)?"on":partial?"unk":"off"; const t=st==="on"?"ouvert":st==="off"?"fermé":"à vérifier"; return `<span class="day ${st}" title="${full} ${label.toLowerCase()} : ${t}" aria-label="${full} ${label.toLowerCase()} : ${t}">${l}</span>`; }).join("")}</span>`;
+  const on=DAYS.filter(([k])=>list.includes(k)).map(d=>d[2]), unk=partial?DAYS.filter(([k])=>!list.includes(k)).map(d=>d[2]):[];
+  const sum=`${label} : ${on.length?"ouvert "+on.join(", "):"aucun ouvert"}${unk.length?" ; à vérifier : "+unk.join(", "):""}`;
+  return `<span class="lbl" aria-hidden="true">${label}</span><span class="days" role="img" aria-label="${esc(sum)}">${DAYS.map(([k,l,full])=>{ const st=list.includes(k)?"on":partial?"unk":"off"; const t=st==="on"?"ouvert":st==="off"?"fermé":"à vérifier"; return `<span class="day ${st}" title="${full} ${label.toLowerCase()} : ${t}">${l}</span>`; }).join("")}</span>`;
 }
 function soirsHtml(r){
-  if(!Array.isArray(r.soirs)) return `<div class="soirs"><span class="lbl">Soirs</span><span class="unk-txt">à vérifier</span><button class="linkbtn edit-h" data-hours="${esc(r.id)}">Renseigner</button></div>`;
+  if(!Array.isArray(r.soirs)) return `<div class="soirs"><span class="lbl">Soirs</span><span class="unk-txt">à vérifier</span><button class="linkbtn edit-h" data-hours="${esc(r.id)}" aria-label="Renseigner les horaires : ${esc(r.n)}">Renseigner</button></div>`;
   const mark=r.userH?`<span class="chk mine" title="Horaires saisis par vous${r.userH.date?" le "+esc(r.userH.date):""}">✎ saisi par vous</span>`:r.hv?`<span class="chk" title="Horaires recoupés sur une source récente (novembre 2026)">✓ vérifié</span>`:"";
-  const btn=`<button class="linkbtn edit-h" data-hours="${esc(r.id)}">Modifier</button>`;
+  const btn=`<button class="linkbtn edit-h" data-hours="${esc(r.id)}" aria-label="Modifier les horaires : ${esc(r.n)}">Modifier</button>`;
   if(r.userH&&r.userH.jours){
     const J=r.userH.jours;
     const rows=DAYS.map(([k,,full])=>{ const j=J[k]||{}; const m=j.m?(j.m===true?"ouvert":esc(j.m)):"—", so=j.s?(j.s===true?"ouvert":esc(j.s)):"—";
@@ -897,23 +922,25 @@ function card(r,s){
   let badge="";
   if(s){ const [vl,vc]=verdict(s.avg); badge+=`<span class="badge ${vc}">N°${s.rank} · ${vl}${s.list.length>1?` · ${s.list.length} visites`:""}</span>`; }
   else if(r.ref){ badge+=`<span class="badge" style="color:var(--brass);border-color:var(--brass)">Votre référence</span>`; }
+  else if(r.custom){ badge+=`<span class="badge">Ajouté par vous</span>`; }
   else if(r.liked){ badge+=`<span class="badge" style="color:var(--brass);border-color:var(--brass)">Déjà aimé</span>`; }
   if(r.ft) badge+=`<span class="badge v-decus">Fermé temporairement</span>`;
   const dest=encodeURIComponent(r.n.replace(/\(.*?\)/g,"")+" "+r.v);
-  return `<article class="card${s?" tested":""}${(r.ref||r.liked)&&!s?" ref":""}">
-    <div class="price">${tier(r.p)}<small>~${r.p} €/pers</small></div>
-    <h3>${esc(r.n)}</h3>
-    <div class="where"><span class="time">⏱ ${r.t} min</span><span>${esc(r.v)}</span><span>· ${esc(r.z)}</span></div>
+  const hid="r-"+String(r.id).replace(/[^\w-]/g,"");
+  return `<article class="card${s?" tested":""}${(r.ref||r.liked)&&!s?" ref":""}" aria-labelledby="${hid}">
+    <div class="price"><span aria-hidden="true">${tier(r.p)}</span><small>~${r.p} €/pers</small></div>
+    <h3 id="${hid}">${esc(r.n)}</h3>
+    <div class="where"><span class="time"><span aria-hidden="true">⏱</span> ${r.t} min</span><span>${esc(r.v)}</span><span>· ${esc(r.z)}</span></div>
     ${badge}
     <div class="tags">${tags}</div>
     ${r.a?`<p class="amb">${esc(r.a)}</p>`:""}
     ${r.w?`<p class="why">${esc(r.w)}</p>`:""}
-    <div class="info">${dimTxt}${r.h?`<span>${esc(r.h)}</span>`:""}${r.g?`<span>${esc(r.g)}</span>`:""}</div>
+    <div class="info">${dimTxt}${r.h?`<span>${esc(r.h)}</span>`:""}${r.g?`<span>${esc(r.g)}</span>`:""}${s&&s.paid!=null?`<span class="paid">Payé ${s.paid} €/pers${s.list.filter(x=>paidPP(x)!=null).length>1?" en moyenne":""}</span>`:""}</div>
     <div class="actions">
-      <button class="btn primary" data-rate="${esc(r.id)}">${s?"Noter une nouvelle visite":"On l'a testé : noter"}</button>
-      <button class="btn heart" data-envie="${esc(r.id)}" aria-pressed="${env?"true":"false"}" aria-label="Ajouter à nos envies">${env?"♥":"♡"}</button>
-      <a href="https://www.google.com/maps/dir/?api=1&origin=Marines%2095640&destination=${dest}" target="_blank" rel="noopener">Trajet ↗</a>
-      ${r.custom?`<button class="linkbtn" data-delr="${esc(r.id)}">Retirer</button>`:""}
+      <button class="btn primary" data-rate="${esc(r.id)}" aria-label="${s?"Noter une nouvelle visite":"On l'a testé : noter"} : ${esc(r.n)}">${s?"Noter une nouvelle visite":"On l'a testé : noter"}</button>
+      <button class="btn heart" data-envie="${esc(r.id)}" aria-pressed="${env?"true":"false"}" aria-label="Nos envies : ${esc(r.n)}">${env?"♥":"♡"}</button>
+      <a href="https://www.google.com/maps/dir/?api=1&origin=Marines%2095640&destination=${dest}" target="_blank" rel="noopener" aria-label="Trajet vers ${esc(r.n)} (nouvel onglet)">Trajet <span aria-hidden="true">↗</span></a>
+      ${r.custom?`<button class="linkbtn" data-editr="${esc(r.id)}" aria-label="Modifier la fiche : ${esc(r.n)}">Modifier la fiche</button><button class="linkbtn" data-delr="${esc(r.id)}" aria-label="Retirer : ${esc(r.n)}">Retirer</button>`:""}
     </div>
   </article>`;
 }
@@ -931,12 +958,12 @@ function renderRank(st){
     const last=o.list[0];
     const likes=[...new Set(o.list.flatMap(x=>(x.ans&&x.ans.aime)||[]))].map(t=>`<span class="tag plus">+ ${esc(t)}</span>`).join("");
     const dislikes=[...new Set(o.list.flatMap(x=>(x.ans&&x.ans.moins)||[]))].filter(t=>t!=="Rien à redire").map(t=>`<span class="tag minus">− ${esc(t)}</span>`).join("");
-    const visits=o.list.map(x=>`<div class="visit"><span>${x.date?new Date(x.date+"T12:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}):"Date ?"}</span>${x.paye?`<span>· ${esc(x.paye)} € à deux</span>`:""}${show?`<span>· ${esc(x.score)}/100</span>`:""}<button class="linkbtn" data-delv="${esc(x.vid)}">Supprimer</button></div>`).join("");
+    const visits=o.list.map(x=>`<div class="visit"><span>${x.date?new Date(x.date+"T12:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}):"Date ?"}</span>${paidPP(x)!=null?`<span>· payé ${esc(Math.round(paidPP(x)))} €/pers</span>`:""}${show?`<span>· ${esc(x.score)}/100</span>`:""}<button class="linkbtn" data-delv="${esc(x.vid)}" aria-label="Supprimer la visite du ${x.date?esc(x.date):"jour inconnu"}">Supprimer</button></div>`).join("");
     return `<div class="rrow">
       <div class="pos${o.rank<=3?" p"+o.rank:""}">${o.rank}</div>
       <div>
         <h3>${esc(r.n)}</h3>
-        <div class="sub">${esc(r.v)}${r.t?` · ${r.t} min`:""}${r.p?` · ~${r.p} €/pers`:""}</div>
+        <div class="sub">${esc(r.v)}${r.t?` · ${r.t} min`:""}${r.p?` · estimé ~${r.p} €/pers`:""}${o.paid!=null?` · <b>payé ${o.paid} €/pers</b>`:""}</div>
         ${(likes||dislikes)?`<div class="liked">${likes}${dislikes}</div>`:""}
         ${last.plat?`<p class="com"><b>Plat coup de cœur :</b> ${esc(last.plat)}</p>`:""}
         ${last.com?`<p class="com">« ${esc(last.com)} »</p>`:""}
@@ -954,7 +981,7 @@ function openRate(rid){
   let r=allR().find(x=>x.id===rid);
   if(!r){ const v=Object.values(state.visits).find(x=>x&&x.rid===rid); if(!v) return; r={id:rid, n:v.nom||rid, v:v.ville||""}; }
   const qs=Q.filter(q=>q.notFor!==rid);
-  cur={r, qs, i:0, ans:{aime:[],moins:[]}, date:new Date().toISOString().slice(0,10), paye:"", plat:"", com:""};
+  cur={r, qs, i:0, ans:{aime:[],moins:[]}, date:new Date().toISOString().slice(0,10), pp:"", plat:"", com:""};
   drawStep(); dlg.showModal();
 }
 function drawStep(){
@@ -966,7 +993,7 @@ function drawStep(){
       <div class="form">
         <div class="two">
           <label for="f-date">Date de la sortie<input type="date" id="f-date" value="${esc(cur.date)}"></label>
-          <label for="f-paye">Addition à deux <span>en €, optionnel</span><input type="number" id="f-paye" min="0" step="1" inputmode="numeric" value="${esc(cur.paye)}"></label>
+          <label for="f-pp">Payé par personne <span>en €, boissons comprises, optionnel</span><input type="number" id="f-pp" min="0" step="0.5" inputmode="decimal" value="${esc(cur.pp)}"></label>
         </div>
         <label for="f-plat">Plat coup de cœur <span>optionnel</span><input type="text" id="f-plat" value="${esc(cur.plat)}" placeholder="Ex. le paleron confit"></label>
         <label for="f-com">Un mot sur la soirée <span>optionnel</span><textarea id="f-com" placeholder="Ce qu'on retiendra…">${esc(cur.com)}</textarea></label>
@@ -974,18 +1001,18 @@ function drawStep(){
     foot=`<button class="btn ghost" data-nav="prev">← Retour</button><button class="btn primary" data-nav="save">Enregistrer et voir le classement</button>`;
   } else if(qq.multi){
     const sel=cur.ans[qq.k]||[];
-    body=`<h4>${esc(qq.q)}</h4><div class="multi">${qq.o.map(o=>`<button class="chip" data-m="${esc(o)}" aria-pressed="${sel.includes(o)}">${esc(o)}</button>`).join("")}</div>`;
+    body=`<h4 id="q-txt">${esc(qq.q)}</h4><div class="multi" role="group" aria-labelledby="q-txt">${qq.o.map(o=>`<button class="chip" data-m="${esc(o)}" aria-pressed="${sel.includes(o)}">${esc(o)}</button>`).join("")}</div>`;
     foot=`<button class="btn ghost" data-nav="prev">← Retour</button><button class="btn primary" data-nav="next">Continuer →</button>`;
   } else {
     const a=cur.ans[qq.k];
-    body=`<h4>${esc(qq.q)}</h4><div class="opts">${qq.o.map((o,j)=>`<button class="opt" data-a="${j}" aria-pressed="${a===j}">${esc(o[0])}</button>`).join("")}${qq.skip?`<button class="opt skip" data-a="skip" aria-pressed="${a==="skip"}">${esc(qq.skip)}</button>`:""}</div>`;
+    body=`<h4 id="q-txt">${esc(qq.q)}</h4><div class="opts" role="group" aria-labelledby="q-txt">${qq.o.map((o,j)=>`<button class="opt" data-a="${j}" aria-pressed="${a===j}">${esc(o[0])}</button>`).join("")}${qq.skip?`<button class="opt skip" data-a="skip" aria-pressed="${a==="skip"}">${esc(qq.skip)}</button>`:""}</div>`;
     foot= i>0?`<button class="btn ghost" data-nav="prev">← Retour</button><span></span>`:`<button class="btn ghost" data-nav="close">Annuler</button><span></span>`;
   }
-  dlg.innerHTML=`<div class="mhead"><div class="kicker">Question ${Math.min(i+1,qs.length-1)} sur ${qs.length-1}</div><h2 id="dlg-title">${esc(r.n)}</h2><div class="prog"><i style="width:${pct}%"></i></div></div>
+  dlg.innerHTML=`<div class="mhead"><div class="kicker">Question ${Math.min(i+1,qs.length-1)} sur ${qs.length-1}</div><h2 id="dlg-title">${esc(r.n)}</h2><div class="prog" aria-hidden="true"><i style="width:${pct}%"></i></div></div>
     <div class="mbody">${body}</div><div class="mfoot">${foot}</div>`;
   const first=dlg.querySelector(".opt[aria-pressed='true'], .opt, .chip, input"); if(first) first.focus({preventScroll:true});
 }
-function keepFinal(){ const g=id=>dlg.querySelector(id); if(g("#f-date")){ cur.date=g("#f-date").value; cur.paye=g("#f-paye").value; cur.plat=g("#f-plat").value.trim(); cur.com=g("#f-com").value.trim(); } }
+function keepFinal(){ const g=id=>dlg.querySelector(id); if(g("#f-date")){ cur.date=g("#f-date").value; cur.pp=g("#f-pp").value; cur.plat=g("#f-plat").value.trim(); cur.com=g("#f-com").value.trim(); } }
 dlg.addEventListener("click", async e=>{
   if(e.target===dlg){ dlg.close(); return; }
   const o=e.target.closest(".opt");
@@ -1005,12 +1032,12 @@ dlg.addEventListener("click", async e=>{
     keepFinal(); n.disabled=true;
     const score=computeScore(cur.ans);
     const vid="v"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-    const doc={rid:cur.r.id, nom:cur.r.n, ville:cur.r.v, date:cur.date||new Date().toISOString().slice(0,10), ans:cur.ans, score, paye:cur.paye||"", plat:cur.plat||"", com:cur.com||"", ts:Date.now()};
+    const doc={rid:cur.r.id, nom:cur.r.n, ville:cur.r.v, date:cur.date||new Date().toISOString().slice(0,10), ans:cur.ans, score, pp:cur.pp||"", plat:cur.plat||"", com:cur.com||"", ts:Date.now()};
     state.visits[vid]=doc;
     const ok=await put("visites",vid,doc);
     if(!ok){ delete state.visits[vid]; n.disabled=false; return; }
     const st=stats(); const s=st[cur.r.id]; const [vl]=verdict(s.avg); const total=Object.keys(st).length;
-    dlg.innerHTML=`<div class="mhead"><div class="kicker">C'est noté</div><h2 id="dlg-title">${esc(cur.r.n)}</h2><div class="prog"><i style="width:100%"></i></div></div>
+    dlg.innerHTML=`<div class="mhead"><div class="kicker">C'est noté</div><h2 id="dlg-title">${esc(cur.r.n)}</h2><div class="prog" aria-hidden="true"><i style="width:100%"></i></div></div>
       <div class="mbody done"><div class="big">N°${s.rank}</div><p>sur ${total} restaurant${total>1?"s":""} testé${total>1?"s":""} · <b>${esc(vl)}</b></p></div>
       <div class="mfoot"><button class="btn ghost" data-nav="close">Fermer</button><button class="btn primary" id="go-rank">Voir le classement</button></div>`;
     dlg.querySelector("#go-rank").addEventListener("click",()=>{ dlg.close(); location.hash="classement"; });
@@ -1023,7 +1050,7 @@ function parseRange(v){ if(!v||v===true) return ["",""]; const m=String(v).match
 function openHours(id){
   const r=allR().find(x=>x.id===id); if(!r) return;
   const base=R.find(x=>x.id===id)||state.ajouts[id]||r;
-  const o=state.horaires[id];
+  const o=userHours(id);
   // pré-remplissage : saisie existante, sinon soirs connus de la liste
   const J={};
   DAYS.forEach(([k])=>{
@@ -1081,27 +1108,37 @@ function openHours(id){
   });
 }
 
-/* ---------- Ajout d'un restaurant ---------- */
-function openAdd(){
-  dlg.innerHTML=`<div class="mhead"><div class="kicker">Nouvelle adresse</div><h2 id="dlg-title">Ajouter un restaurant</h2></div>
+/* ---------- Ajout / modification d'un restaurant ---------- */
+function openAdd(editId){
+  const d=editId? state.ajouts[editId] : null;
+  const zones=[...new Set(R.map(r=>r.z).concat(d&&d.z?[d.z]:[]))];
+  const sel=new Set(d?d.s||[]:[]), so=new Set(d&&Array.isArray(d.soirs)?d.soirs:[]);
+  dlg.innerHTML=`<div class="mhead"><div class="kicker">${d?"Votre adresse":"Nouvelle adresse"}</div><h2 id="dlg-title">${d?"Modifier la fiche":"Ajouter un restaurant"}</h2></div>
   <form class="mbody form" id="add-form">
-    <label for="a-n">Nom<input type="text" id="a-n" required></label>
-    <div class="two"><label for="a-v">Ville<input type="text" id="a-v" required></label>
-    <label for="a-z">Secteur<select id="a-z">${[...new Set(R.map(r=>r.z))].map(z=>`<option>${esc(z)}</option>`).join("")}<option>Autre</option></select></label></div>
-    <div class="two"><label for="a-t">Trajet <span>en minutes</span><input type="number" id="a-t" min="5" max="120" value="30" required></label>
-    <label for="a-p">Prix moyen <span>€ par personne</span><input type="number" id="a-p" min="5" max="300" value="35" required></label></div>
-    <label for="a-s">Style<select id="a-s">${Object.entries(STYLES).map(([k,l])=>`<option value="${k}">${esc(l)}</option>`).join("")}</select></label>
-    <label for="a-w">Pourquoi on veut y aller <span>optionnel</span><input type="text" id="a-w"></label>
-    <div class="mfoot" style="padding:0"><button type="button" class="btn ghost" data-nav="close">Annuler</button><button class="btn primary" type="submit">Ajouter</button></div>
+    <label for="a-n">Nom<input type="text" id="a-n" required value="${esc(d?d.n:"")}"></label>
+    <div class="two"><label for="a-v">Ville<input type="text" id="a-v" required value="${esc(d?d.v:"")}"></label>
+    <label for="a-z">Secteur<select id="a-z">${zones.map(z=>`<option${d&&d.z===z?" selected":""}>${esc(z)}</option>`).join("")}${zones.includes("Autre")?"":`<option${d&&d.z==="Autre"?" selected":""}>Autre</option>`}</select></label></div>
+    <div class="two"><label for="a-t">Trajet depuis Marines <span>en minutes</span><input type="number" id="a-t" min="5" max="120" value="${esc(d?d.t:30)}" required></label>
+    <label for="a-p">Prix moyen estimé <span>€ par personne</span><input type="number" id="a-p" min="5" max="300" value="${esc(d?d.p:35)}" required></label></div>
+    <fieldset><legend>Styles <span>plusieurs choix possibles</span></legend><div class="ckchips">${Object.entries(STYLES).map(([k,l])=>`<label><input type="checkbox" name="a-s" value="${k}"${sel.has(k)?" checked":""}> ${esc(l)}</label>`).join("")}</div></fieldset>
+    <fieldset><legend>Soirs d'ouverture <span>laissez vide si vous ne savez pas</span></legend><div class="hgrid">${DAYS.map(([k,,full])=>`<label><input type="checkbox" name="a-so" value="${k}"${so.has(k)?" checked":""}><span>${full.slice(0,3)}.</span></label>`).join("")}</div></fieldset>
+    <label for="a-h">Horaires <span>optionnel, ex. « fermé le lundi, midi et soir »</span><input type="text" id="a-h" value="${esc(d?d.h||"":"")}"></label>
+    <label for="a-a">Ambiance, cadre <span>optionnel</span><input type="text" id="a-a" value="${esc(d?d.a||"":"")}"></label>
+    <label for="a-w">Pourquoi on veut y aller <span>optionnel</span><input type="text" id="a-w" value="${esc(d?d.w||"":"")}"></label>
+    <label for="a-g">Adresse, téléphone, infos <span>optionnel</span><input type="text" id="a-g" value="${esc(d&&d.g!=="Ajouté par vous"?d.g||"":"")}"></label>
+    <div class="mfoot" style="padding:0"><button type="button" class="btn ghost" data-nav="close">Annuler</button><button class="btn primary" type="submit">${d?"Enregistrer":"Ajouter"}</button></div>
   </form>`;
   dlg.showModal();
   dlg.querySelector("#add-form").addEventListener("submit", async e=>{
-    e.preventDefault(); const g=id=>dlg.querySelector(id).value.trim();
-    const id="perso-"+Date.now().toString(36);
-    const doc={id, n:g("#a-n"), v:g("#a-v"), z:g("#a-z"), t:+g("#a-t")||30, p:+g("#a-p")||35, s:[g("#a-s")], a:"", w:g("#a-w"), g:"Ajouté par vous", soirs:null};
-    state.ajouts[id]=doc; const ok=await put("ajouts",id,doc);
-    if(!ok){ delete state.ajouts[id]; return; }
-    dlg.close(); toast("Restaurant ajouté"); render();
+    e.preventDefault(); const f=e.target, g=id=>f.querySelector(id).value.trim();
+    const all=name=>[...f.querySelectorAll(`input[name="${name}"]:checked`)].map(i=>i.value);
+    const id=d? d.id : "perso-"+Date.now().toString(36);
+    const soirs=all("a-so");
+    const doc={id, n:g("#a-n"), v:g("#a-v"), z:g("#a-z"), t:+g("#a-t")||30, p:+g("#a-p")||35, s:all("a-s"),
+      a:g("#a-a"), w:g("#a-w"), g:g("#a-g"), h:g("#a-h"), soirs: soirs.length? soirs : null, ts:Date.now()};
+    const prev=state.ajouts[id]; state.ajouts[id]=doc; const ok=await put("ajouts",id,doc);
+    if(!ok){ if(prev) state.ajouts[id]=prev; else delete state.ajouts[id]; return; }
+    dlg.close(); toast(d?"Fiche enregistrée":"Restaurant ajouté"); render();
   });
 }
 
@@ -1115,8 +1152,9 @@ document.addEventListener("click", async e=>{
   const dv=e.target.closest("[data-delv]");
   if(dv){ const id=dv.dataset.delv; const keep=state.visits[id]; delete state.visits[id]; render();
     const ok=await del("visites",id); if(!ok){ state.visits[id]=keep; render(); } else toast("Visite supprimée"); return; }
+  const er=e.target.closest("[data-editr]"); if(er){ openAdd(er.dataset.editr); return; }
   const dr=e.target.closest("[data-delr]");
-  if(dr){ const id=dr.dataset.delr; const keep=state.ajouts[id]; delete state.ajouts[id]; render();
+  if(dr){ const id=dr.dataset.delr; if(!confirm(`Retirer « ${(state.ajouts[id]||{}).n||"ce restaurant"} » de la liste ? Les notes déjà enregistrées restent dans le classement.`)) return; const keep=state.ajouts[id]; delete state.ajouts[id]; render();
     const ok=await del("ajouts",id); if(!ok){ state.ajouts[id]=keep; render(); } return; }
   if(e.target.closest("#add-btn")){ openAdd(); return; }
   if(e.target.closest("[data-sync]")){ openSync(); return; }
@@ -1130,9 +1168,14 @@ function route(){
   ui.view=v;
   $("#view-liste").hidden= v!=="liste";
   $("#view-classement").hidden= v!=="classement";
-  $("#tab-liste").setAttribute("aria-selected", v==="liste");
-  $("#tab-classement").setAttribute("aria-selected", v==="classement");
+  [["liste","#tab-liste"],["classement","#tab-classement"]].forEach(([k,sel])=>{ const t=$(sel); t.setAttribute("aria-selected", v===k); t.tabIndex= v===k?0:-1; });
 }
+document.querySelector(".tablist").addEventListener("keydown",e=>{
+  if(!["ArrowLeft","ArrowRight","Home","End"].includes(e.key)) return;
+  e.preventDefault(); const next= ui.view==="liste"?"classement":"liste";
+  const v= e.key==="Home"?"liste": e.key==="End"?"classement": next;
+  location.hash=v; route(); $("#tab-"+v).focus();
+});
 window.addEventListener("hashchange",route);
 initFilters(); route(); render();
 </script>
