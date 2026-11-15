@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nos tables autour de Marines</title>
+<meta name="description" content="Nos restaurants à tester autour de Marines : horaires, prix, envies et classement après chaque sortie.">
+<meta name="theme-color" content="#7d1d34">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%BD%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -192,6 +195,23 @@ footer p{margin:4px 0;max-width:90ch}
   .two{grid-template-columns:1fr}
   input[type="range"]{width:110px}
 }
+.ftoggle{display:none}
+#fmore{display:contents}
+@media (min-width:701px){
+  .filters > .wrap{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+  .filters .frow{flex:1 1 100%;margin:0}
+  .filters .frow.main{flex:1 1 240px}
+  #fmore > .frow:first-child{flex:0 1 auto}
+}
+@media (max-width:700px){
+  /* Sur téléphone, la barre collante ne garde que la recherche : les autres filtres se déplient */
+  .ftoggle{display:inline-block;flex:0 0 auto}
+  #fmore{display:none}
+  .filters.open #fmore{display:block}
+  #fmore > .frow{margin-top:10px}
+  .filters.open{position:static}
+  input[type="search"]{min-width:0}
+}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
 </head>
@@ -199,7 +219,7 @@ footer p{margin:4px 0;max-width:90ch}
 <div class="wrap">
   <header class="top">
     <h1>Nos tables autour de Marines</h1>
-    <p>Une sélection d'adresses de 15 à 50 min de la maison : bistrots Pas Parisiens, terroir et fait maison, italiens et japonais (pas de buffet asiatique à volonté : les deux exceptions, Hoki Sushi et Sushi Club, sont signalées « À volonté »), tables chic sans se ruiner. Après chaque sortie, on répond au questionnaire et le classement se met à jour tout seul.</p>
+    <p>Une sélection d'adresses de 15 à 60 min de la maison : bistrots Pas Parisiens, terroir et fait maison, italiens et japonais (pas de buffet asiatique à volonté : les deux exceptions, Hoki Sushi et Sushi Club, sont signalées « À volonté »), tables chic sans se ruiner. Après chaque sortie, on répond au questionnaire et le classement se met à jour tout seul.</p>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-liste" aria-selected="true" data-view="liste">Restaurants <span class="n" id="n-liste"></span></button>
       <button class="tab" role="tab" id="tab-classement" aria-selected="false" data-view="classement">Notre classement <span class="n" id="n-class"></span></button>
@@ -211,9 +231,13 @@ footer p{margin:4px 0;max-width:90ch}
 <section id="view-liste">
   <div class="filters">
     <div class="wrap">
-      <div class="frow">
+      <div class="frow main">
         <input type="search" id="q" placeholder="Chercher un nom, une ville, un plat…" aria-label="Recherche">
-        <label class="field" for="tmax">Trajet max <b id="tmax-v"></b><input type="range" id="tmax" min="15" max="55" step="5" value="55"></label>
+        <button class="btn ftoggle" id="ftoggle" type="button" aria-expanded="false" aria-controls="fmore">Filtres</button>
+      </div>
+      <div id="fmore">
+      <div class="frow">
+        <label class="field" for="tmax">Trajet max <b id="tmax-v"></b><input type="range" id="tmax" min="15" max="60" step="5" value="60"></label>
         <label class="field" for="pmax">Budget max <b id="pmax-v"></b><input type="range" id="pmax" min="20" max="150" step="5" value="150"></label>
         <label class="field" for="sort">Trier par
           <select id="sort">
@@ -244,6 +268,7 @@ footer p{margin:4px 0;max-width:90ch}
         <label class="toggle"><input type="checkbox" id="f-vol"> Sans à volonté</label>
         <button class="btn ghost" id="reset">Réinitialiser</button>
       </div>
+      </div>
     </div>
   </div>
   <div class="wrap">
@@ -266,7 +291,7 @@ footer p{margin:4px 0;max-width:90ch}
 <div class="wrap">
   <footer>
     <p>Temps de trajet estimés en voiture depuis Marines, hors bouchons : le lien « Trajet » ouvre l'itinéraire réel. Prix moyen estimé par personne, hors boissons, d'après les guides (Gault&amp;Millau, Michelin) et les avis en ligne de 2025-2026.</p>
-    <p>Horaires et prix vérifiés le 15 novembre 2026 (guides Michelin et Gault&amp;Millau, PagesJaunes, offices de tourisme, sites de réservation). Pastille verte = soir ouvert, barrée = fermé, pointillés = non confirmé. « ✓ vérifié » = horaires recoupés sur une source récente. Ils changent souvent, surtout le dimanche soir et en hiver : on appelle avant d'y aller.</p>
+    <p>Horaires, prix et activité vérifiés un par un le 15 novembre 2026 sur les fiches Google des établissements, recoupées avec les guides Michelin et Gault&amp;Millau, les offices de tourisme et les sites des restaurants. Prix « Google » = fourchette par personne déclarée par les clients. Pastille verte = soir ouvert, barrée = fermé, pointillés = non confirmé. « ✓ vérifié » = horaires recoupés sur une source récente. Ils changent souvent, surtout le dimanche soir et en hiver : on appelle avant d'y aller.</p>
   </footer>
 </div>
 
@@ -282,315 +307,284 @@ const STYLES = {
 };
 // t = minutes depuis Marines (estimation), p = prix moyen €/pers hors boissons, soir (budget du dîner)
 // soirs = soirs d'ouverture confirmés (lu ma me je ve sa di), null = inconnus ; ps = autres soirs non confirmés
+// ft = fermé temporairement d'après Google (exclu du filtre « Ouvert le soir »)
 // hv = horaires recoupés sur une source récente (Michelin, PagesJaunes, office de tourisme, site de résa…) ; vol = formule à volonté ; star = étoiles Michelin
-const PMAX=150;
+const PMAX=150, TMAX=60;
 const ALL7=["lu","ma","me","je","ve","sa","di"], MA_SA=["ma","me","je","ve","sa"];
 const R = [
   // Référence et déjà aimés
   {id:"le-loft", n:"Le Loft", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:36, s:["BRA","BR"], ref:true,
    a:"Café-brasserie nouvelle génération dans un ancien hôtel particulier, grande terrasse ombragée.",
-   w:"Votre référence. Notez-le en premier pour étalonner le classement.", g:"16 Grande Rue · buffet du soir 35,90 € (32,90 € en prépaiement) · brunch le dimanche",
-   soirs:["ma","me","je","ve","sa"], ps:true, h:"Ouvert du mardi au dimanche, fermé le lundi. Dimanche soir à confirmer."},
-  {id:"hoki-sushi", n:"Hoki Sushi", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:22, s:["JAP"], liked:true, vol:true,
+   w:"Votre référence. Notez-le en premier pour étalonner le classement.", g:"16 Grande Rue · Google 4,6/5 (4 600 avis) · grand buffet du soir 35,90 € (32,90 € en prépaiement) · buffet midi en semaine · brunch le dimanche",
+   soirs:["ve","sa"], hv:true, h:"Ouvert tous les jours, mais le soir seulement le vendredi et le samedi (jusqu'à 23h, « grand buffet du soir »). Les autres jours, fermeture à 20h."},
+  {id:"hoki-sushi", n:"Hoki Sushi", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:25, s:["JAP"], liked:true, vol:true,
    a:"Japonais de quartier, sushis, sashimis, brochettes.",
-   w:"Déjà aimé. À noter pour le comparer aux autres japonais de la liste.", g:"18 rue de l'Hautil · à volonté midi, soir et week-end · formules dès 12 € environ",
-   soirs:null, h:"Ouvert le soir et le week-end (d'après vous). Jour de fermeture à vérifier."},
+   w:"Déjà aimé. À noter pour le comparer aux autres japonais de la liste.", g:"18 rue de l'Hautil · à volonté midi, soir et week-end · 20 à 30 € par personne (Google)",
+   soirs:ALL7, hv:true, h:"Tous les jours 12h-15h et 18h30-22h30 (23h vendredi et samedi)."},
   {id:"la-capanna", n:"La Capanna", v:"Éragny-sur-Oise", z:"Cergy-Pontoise", t:25, p:25, s:["ITA"], liked:true,
    a:"Décor italien chaleureux, patrons adorables d'après les avis.",
-   w:"Déjà aimé. Pizzas pâte fine, pâtes, bon rapport qualité/prix (4,1/5 sur 730 avis).", g:"Rue du Bas Noyer · 20 à 30 €",
-   soirs:null, h:"Service 11h45-14h45 et 18h-22h. Jour de fermeture à vérifier."},
+   w:"Déjà aimé. Pizzas pâte fine, pâtes, bon rapport qualité/prix.", g:"1 rue du Bas Noyer · 20 à 30 € par personne (Google)",
+   soirs:ALL7, hv:true, h:"Tous les jours 11h45-14h45 et 18h-22h (22h30 vendredi et samedi)."},
 
   // Dans l'esprit de Hoki Sushi et La Capanna
-  {id:"o-chalet", n:"Ô Chalet", v:"Éragny-sur-Oise", z:"Cergy-Pontoise", t:25, p:35, s:["EAU","TER"],
-   a:"Presque les pieds dans l'Oise, baies vitrées. L'hiver : fondue, raclette, tartiflette. L'été : terrasse, salades, friture.",
-   w:"Propriétaires adorables : 9,9/10 sur plus de 400 avis.", g:"55 bis chemin de Halage · budget moyen 30 à 40 € · formule midi en semaine 15 €",
-   soirs:["me","je","ve","sa"], hv:true, h:"Mer.-sam. midi et 19h30-22h · dimanche midi · fermé lun.-mar. et en août."},
-  {id:"aldente", n:"Al'dente Trattoria", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:28, s:["ITA","TER"],
+  {id:"aldente", n:"Al'dente Trattoria", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:28, s:["ITA","TER"], ft:true,
    a:"Trattoria et épicerie fine sur la place du Grand Martroy, terrasse.",
-   w:"Pâtes fraîches maison, listée par Gault&Millau.", g:"11 place du Grand Martroy · salades 16 €, environ 28 € le soir",
-   soirs:["je","ve","sa"], hv:true, h:"Dîner jeu.-sam. 19h-22h · lundi midi seulement · fermé le dimanche."},
-  {id:"felicie", n:"Félicie", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:35, s:["ITA"],
+   w:"Pâtes fraîches maison, listée par Gault&Millau, 4,7/5 sur Google.", g:"11 place du Grand Martroy · salades 16 €, environ 28 € le soir",
+   soirs:["je","ve","sa"], h:"Google l'indique « fermé temporairement » (15 novembre 2026). Avant : dîner jeu.-sam. 19h-22h. Appeler avant d'y aller."},
+  {id:"felicie", n:"Félicie", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:32, s:["ITA"],
    a:"Trattoria au cœur de Pontoise.",
-   w:"Cuisine sicilienne, 4,7/5 sur près de 400 avis.", g:"2 rue de l'Hôtel de Ville · 30 à 40 € le soir · formule midi environ 14 €",
-   soirs:null, h:"Midi 11h30-14h30 confirmé. Soirs à vérifier."},
-  {id:"mia-osteria", n:"Mia Osteria", v:"Cergy", z:"Cergy-Pontoise", t:20, p:30, s:["ITA","TER"],
+   w:"Cuisine sicilienne, 4,7/5 sur près de 400 avis.", g:"2 rue de l'Hôtel de Ville · 20 à 30 € par personne (Google), 30 à 40 € le soir d'après les guides · formule midi environ 14 €",
+   soirs:["me","je","ve","sa"], hv:true, h:"Midi tous les jours 11h30-14h30 · soirs mer.-sam. 19h-22h30."},
+  {id:"mia-osteria", n:"Mia Osteria", v:"Cergy", z:"Cergy-Pontoise", t:20, p:28, s:["ITA","TER"],
    a:"Osteria conviviale.",
-   w:"Cuisine italienne faite maison, 4,4/5 sur 732 avis.", g:"1 av. de la Plaine des Sports · €€",
-   soirs:null, h:"Ouvert jusqu'à 22h30. Jours à vérifier."},
-  {id:"cala-luna", n:"Cala Luna", v:"Éragny-sur-Oise", z:"Cergy-Pontoise", t:25, p:28, s:["ITA"],
+   w:"Cuisine italienne faite maison, 4,4/5 sur 732 avis.", g:"1 av. de la Plaine des Sports · 20 à 30 € par personne (Google)",
+   soirs:["lu","ma","me","je","ve","sa"], hv:true, h:"Lun.-sam. midi et 18h45-minuit · dimanche midi seulement."},
+  {id:"cala-luna", n:"Cala Luna", v:"Éragny-sur-Oise", z:"Cergy-Pontoise", t:25, p:25, s:["ITA"],
    a:"Belle décoration, terrasse, esprit « comme à la maison ».",
-   w:"Grande carte, portions copieuses, beaucoup de desserts. Brunch à volonté le dimanche.", g:"291 av. Roger Guichard · pâtes environ 20 €, pizzas environ 15 €",
-   soirs:null, h:"Horaires à vérifier."},
+   w:"Grande carte, portions copieuses, beaucoup de desserts. Brunch à volonté le dimanche.", g:"291 av. Roger Guichard · 20 à 30 € par personne (Google) · pâtes environ 20 €, pizzas environ 15 €",
+   soirs:ALL7, hv:true, h:"Tous les jours 11h-14h et 19h-1h."},
   {id:"sushi-kyo", n:"Sushi Kyo", v:"Cergy", z:"Cergy-Pontoise", t:20, p:20, s:["JAP"],
    a:"Cadre agréable, service rapide et souriant. Halal.",
-   w:"Japonais réputé pour la qualité : 9,4/10 sur TheFork.", g:"Centre commercial des 3 Fontaines · budget moyen 19 €",
-   soirs:["lu","ma"], ps:true, h:"Lun.-mar. 11h30-14h30 et 18h30-22h confirmés, autres jours à vérifier."},
-  {id:"owasa", n:"O'Wasa", v:"Cergy (Port Cergy)", z:"Cergy-Pontoise", t:20, p:32, s:["JAP","BR"],
-   a:"Japonais moderne au bord du port, cuisine ouverte en salle.",
-   w:"Sushis et makis au thon très appréciés, style nippo-américain.", g:"Port Cergy · prix estimé",
-   soirs:null, h:"Horaires et prix non trouvés : appeler."},
+   w:"Japonais réputé pour la qualité : 9,4/10 sur TheFork.", g:"Centre commercial des 3 Fontaines · 10 à 30 € par personne (Google)",
+   soirs:["lu","ma","me","je","ve","sa"], hv:true, h:"Lun.-sam. 11h30-14h30 et 18h30-22h · fermé le dimanche."},
   {id:"sushi-sur-oise", n:"Sushi sur Oise", v:"Beaumont-sur-Oise", z:"Vallée de l'Oise", t:35, p:18, s:["JAP"],
    a:"Petite adresse japonaise, surtout à emporter.",
-   w:"Excellentes notes (4,8/5 sur plus de 850 avis). Places assises à vérifier.", g:"13 rue Albert-Ier · 12 à 20 €",
-   soirs:null, h:"Horaires à vérifier."},
+   w:"Excellentes notes (4,8/5 sur plus de 850 avis). Places assises à vérifier.", g:"12 rue Albert-Ier · 10 à 20 € par personne (Google)",
+   soirs:["ma","me","je","ve","sa","di"], hv:true, h:"Le soir seulement, 18h-23h · fermé le lundi."},
   {id:"sushi-club", n:"Sushi Club", v:"La Garenne-Colombes", z:"Hauts-de-Seine", t:45, p:40, s:["JAP","CHIC"], vol:true,
    a:"Japonais semi-gastronomique, commande à volonté sur tablette.",
-   w:"Plus de 11 000 avis à 4,7/5. À volonté haut de gamme, à côté de Tata Yoyo.", g:"2 place de l'Europe · environ 40 € le menu du soir",
-   soirs:ALL7, h:"Tous les jours 12h-14h30 et 19h-22h45 (guide Pudlowski)."},
+   w:"Plus de 11 000 avis à 4,7/5. À volonté haut de gamme, à côté de Tata Yoyo.", g:"2 place de l'Europe · 30 à 50 € par personne (Google)",
+   soirs:ALL7, hv:true, h:"Tous les jours 12h-14h50 et 19h-22h50."},
 
   // Bistrots Pas Parisiens
-  {id:"chez-mimi", n:"Chez Mimi (ex-Bistrot Pas Parisien)", v:"Colombes", z:"Hauts-de-Seine", t:45, p:35, s:["PP","BRA","CHIC"],
+  {id:"chez-mimi", n:"Chez Mimi (ex-Bistrot Pas Parisien)", v:"Colombes", z:"Hauts-de-Seine", t:45, p:38, s:["PP","BRA","CHIC"],
    a:"Brasserie de 1907 : zinc, miroirs, moulures, lustres. Chic sans chichi.",
-   w:"Le bistrot historique du groupe, rebaptisé et rénové en 2025.", g:"Gault&Millau 11/20 · Assiette Michelin · menu « Bistrot » 34,90 €",
-   soirs:MA_SA, hv:true, h:"Mar.-sam. 12h-14h et 19h-23h · fermé dimanche et lundi (Michelin)."},
+   w:"Le bistrot historique du groupe, nouvelle carte et nouvelle équipe en 2026.", g:"Gault&Millau 11/20 · Assiette Michelin · 30 à 50 € par personne (Google) · menu « Bistrot » 34,90 €",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. 12h-0h30 · fermé dimanche et lundi."},
   {id:"tata-yoyo", n:"Tata Yoyo", v:"La Garenne-Colombes", z:"Hauts-de-Seine", t:45, p:35, s:["PP","TER"],
    a:"Déco rustique et bois patiné, esprit maison de famille, on chante pour les anniversaires.",
-   w:"Cuisine d'un finaliste de Top Chef 2022, plats canailles revisités (pâté en croûte, saucisse-purée).", g:"26 av. de Verdun-1916 · menu 29,99 à 39,99 € · déjeuner 25 €",
-   soirs:null, h:"Jours d'ouverture à vérifier."},
-  {id:"chou-chanorier", n:"Le Chou de Chanorier", v:"Croissy-sur-Seine", z:"Boucle de Seine", t:45, p:40, s:["PP","CHIC","TER"],
+   w:"Cuisine d'un finaliste de Top Chef 2022, plats canailles revisités (pâté en croûte, saucisse-purée).", g:"26 av. de Verdun-1916 · 30 à 40 € par personne (Google) · menu 29,99 à 39,99 € · déjeuner 25 €",
+   soirs:ALL7, hv:true, h:"Ouvert tous les jours, midi et soir (9h-minuit)."},
+  {id:"chou-chanorier", n:"Le Chou de Chanorier", v:"Croissy-sur-Seine", z:"Boucle de Seine", t:45, p:45, s:["PP","CHIC","TER"],
    a:"Dans le château Chanorier, terrasse guinguette l'été.",
-   w:"Le seul Pas Parisiens des Yvelines. Chef Charlie Anne (Top Chef), cuisine normande modernisée.", g:"12 Grande Rue · menus 25 à 49 €",
-   soirs:ALL7, hv:true, h:"Ouvert tous les jours toute l'année (sauf 1er janvier et 25 décembre)."},
-  {id:"sapristi", n:"Sapristi", v:"Rueil-Malmaison", z:"Hauts-de-Seine", t:50, p:38, s:["PP","CHIC"],
+   w:"Le seul Pas Parisiens des Yvelines. Chef Charlie Anne (Top Chef), cuisine normande modernisée.", g:"12 Grande Rue · 50 à 60 € par personne (Google) · menus 25 à 49 €",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. 9h-23h30 · dimanche 12h-17h (midi seulement) · fermé le lundi."},
+  {id:"sapristi", n:"Sapristi", v:"Rueil-Malmaison", z:"Hauts-de-Seine", t:50, p:40, s:["PP","CHIC"],
    a:"Conçu comme une maison de famille en plusieurs pièces, vaste terrasse près de la mairie.",
-   w:"L'une des adresses phares du groupe, carte de saison qui change souvent.", g:"Gault&Millau 11/20 · Assiette Michelin · menu du soir 35 €",
-   soirs:["lu","ma","me","je","ve","sa"], ps:true, h:"Dimanche : sources contradictoires (ouvert tous les jours selon Sortiraparis, fermé selon Pudlowski). Appeler."},
-  {id:"splash", n:"Splash", v:"Asnières-sur-Seine", z:"Hauts-de-Seine", t:45, p:40, s:["PP","EAU","BR"],
-   a:"Au bord de l'eau, déco plage, grandes tablées. De novembre à l'hiver : chalet « Chez Monix » (fondue, raclette).",
-   w:"Le plus festif des Pas Parisiens. Menu chalet 39,99 € en ce moment.", g:"Port Van Gogh · Gault&Millau 12/20 · environ 40 €",
-   soirs:ALL7, hv:true, h:"Tous les jours 12h-15h et 19h-23h."},
-  {id:"saperlipopette", n:"Saperlipopette!", v:"Puteaux", z:"Hauts-de-Seine", t:50, p:40, s:["PP","BIS","CHIC"],
+   w:"L'une des adresses phares du groupe, carte de saison qui change souvent.", g:"Gault&Millau 11/20 · Assiette Michelin · 30 à 50 € par personne (Google) · menu du soir 35 €",
+   soirs:ALL7, hv:true, h:"Ouvert tous les jours, midi et soir (9h-minuit), dimanche compris."},
+  {id:"splash", n:"Splash", v:"Asnières-sur-Seine", z:"Hauts-de-Seine", t:45, p:45, s:["PP","EAU","BR"],
+   a:"Au bord de l'eau, déco plage, grandes tablées. L'hiver : chalet « Chez Monix » (fondue, raclette).",
+   w:"Le plus festif des Pas Parisiens. En ce moment en version chalet « Chez Monix au Splash ».", g:"Port Van Gogh · Gault&Millau 12/20 · 40 à 70 € par personne (Google)",
+   soirs:ALL7, hv:true, h:"Tous les jours, midi et soir (9h-minuit)."},
+  {id:"saperlipopette", n:"Saperlipopette!", v:"Puteaux", z:"Hauts-de-Seine", t:50, p:42, s:["PP","BIS","CHIC"],
    a:"Salon-bibliothèque chic et feutré.",
-   w:"Tous les codes de la bistronomie, ardoise renouvelée toutes les quatre semaines.", g:"Gault&Millau 13/20 · menu gourmand 39,99 € · déjeuner 24,99 à 29,99 €",
-   soirs:ALL7, hv:true, h:"Ouvert tous les jours."},
-  {id:"coco-rocco", n:"Coco Rocco", v:"Puteaux", z:"Hauts-de-Seine", t:50, p:36, s:["PP","ITA"],
+   w:"Tous les codes de la bistronomie, ardoise renouvelée toutes les quatre semaines. 4,7/5 sur plus de 7 000 avis.", g:"24 rue Mars-et-Roty · Gault&Millau 13/20 · 30 à 70 € par personne (Google) · menu gourmand 39,99 €",
+   soirs:ALL7, hv:true, h:"Ouvert tous les jours, midi et soir (9h-minuit)."},
+  {id:"coco-rocco", n:"Coco Rocco", v:"Puteaux", z:"Hauts-de-Seine", t:50, p:38, s:["PP","ITA"],
    a:"Dolce vita version Pas Parisiens, à côté d'un petit parc.",
-   w:"Le premier italien du groupe : pizzas, pâtes, vitello tonnato.", g:"95 av. du Général-de-Gaulle · menu pâtes/pizza 35,99 €",
-   soirs:ALL7, hv:true, h:"Tous les jours 12h-14h30 et 19h-22h30."},
-  {id:"la-haut", n:"Là-Haut", v:"Suresnes", z:"Hauts-de-Seine", t:50, p:42, s:["PP","CHIC","BR"],
+   w:"Le premier italien du groupe : pizzas, pâtes, vitello tonnato.", g:"95 av. du Général-de-Gaulle · 30 à 60 € par personne (Google) · menu pâtes/pizza 35,99 €",
+   soirs:ALL7, hv:true, h:"Lun.-jeu. 12h-14h30 et 19h-22h30 · ven.-dim. 12h-22h30 en continu."},
+  {id:"la-haut", n:"Là-Haut", v:"Suresnes", z:"Hauts-de-Seine", t:50, p:45, s:["PP","CHIC","BR"],
    a:"Baies vitrées face aux tours de la Défense qui s'allument au dîner.",
-   w:"Pour un dîner avec vue, version Pas Parisiens.", g:"70 av. Franklin-Roosevelt · Gault&Millau 12,5/20 · Assiette Michelin · dès 39,99 €",
-   soirs:ALL7, hv:true, h:"Midi et soir tous les jours d'après les sources récentes."},
+   w:"Pour un dîner avec vue, version Pas Parisiens.", g:"70 av. Franklin-Roosevelt · Gault&Millau 12,5/20 · Assiette Michelin · 50 à 60 € par personne (Google), menus dès 39,99 €",
+   soirs:ALL7, hv:true, h:"Tous les jours 12h-14h et 19h-23h."},
+  {id:"micheline", n:"Micheline", v:"Sèvres", z:"Hauts-de-Seine", t:55, p:42, s:["PP","BRA","CHIC"],
+   a:"Dans l'ancienne gare du Pont de Sèvres, ouverte en 2024.",
+   w:"Nouveau dans la liste : un Bistrot Pas Parisien de plus, un peu au-delà de 45 min.", g:"2 Grande Rue · 30 à 70 € par personne (Google)",
+   soirs:ALL7, hv:true, h:"Tous les jours midi et soir, 19h-23h30 (minuit vendredi et samedi)."},
+  {id:"mlle-celeste", n:"Mlle Céleste", v:"Meudon", z:"Hauts-de-Seine", t:60, p:45, s:["PP","CHIC","BR"],
+   a:"Au Hangar Y, l'ancien hangar à dirigeables restauré de Meudon.",
+   w:"Nouveau dans la liste : le dernier-né des Pas Parisiens, carte signée Yoann Conte (deux étoiles). Le plus loin de la liste.", g:"Hangar Y · 30 à 60 € par personne (Google)",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. midi et 19h-22h · dimanche 11h30-17h · fermé le lundi."},
 
   // Vexin
-  {id:"clos-petillon", n:"Le Clos du Pétillon", v:"Théméricourt", z:"Vexin", t:15, p:34, s:["TER"],
-   a:"Cadre champêtre au cœur du parc du Vexin, cheminée l'hiver, grande terrasse l'été.",
-   w:"Produits des fermes alentour et petites touches corses. Coup de cœur du Parc du Vexin.", g:"Menu 34 € · menu du jour 22 €",
-   soirs:["ve","sa"], hv:true, h:"Horaires d'hiver : soirs ven.-sam. 19h-21h · midi mer., jeu., dim. · fermé lun.-mar."},
-  {id:"petille", n:"La Pétille", v:"Magny-en-Vexin", z:"Vexin", t:15, p:25, s:["TER"],
-   a:"Restaurant de bourg convivial, esprit partage.",
-   w:"Produits frais et locaux, cuisine traditionnelle et gourmande.", g:"27 place d'Armes · menu 20 à 30 €",
-   soirs:["je","ve","sa"], hv:true, h:"Midi tous les jours sauf mercredi · soirs jeu.-sam."},
-  {id:"ptit-bouchon", n:"Le P'tit Bouchon", v:"Magny-en-Vexin", z:"Vexin", t:15, p:28, s:["TER"],
-   a:"Petite salle simple, place du marché.",
-   w:"Recettes régionales et producteurs locaux. Un avis trouve les prix élevés.", g:"8 place du Marché-aux-Fruits",
-   soirs:["je","ve","sa"], hv:true, h:"Service du soir court : jeu. 19h30-20h30, ven.-sam. 19h30-21h · midi mer.-dim."},
+  {id:"relais-bras-dor", n:"Le Relais du Bras d'Or", v:"Magny-en-Vexin", z:"Vexin", t:15, p:32, s:["TER"],
+   a:"Restaurant de bourg avec cheminée et terrasse, à l'adresse de l'ancienne Pétille.",
+   w:"Nouveau dans la liste : tout fait maison avec des produits régionaux, 4,4/5 sur plus de 400 avis.", g:"27 place d'Armes · 20 à 50 € par personne (Google) · plat du moment 24 €",
+   soirs:["je","ve","sa"], hv:true, h:"Soirs jeu.-sam. 19h-21h · midi mer.-dim. · fermé lundi et mardi."},
   {id:"jardins-epicure", n:"Les Jardins d'Épicure", v:"Bray-et-Lû", z:"Vexin", t:25, p:60, s:["CHIC","GAS"],
    a:"Demeure avec parc et rivière, tables autour de la piscine sous verrière.",
-   w:"Pour une occasion : cuisine soignée, menus dégustation.", g:"Gault&Millau 12/20 · 45 à 82 €",
-   soirs:MA_SA, hv:true, h:"Fermé lundi, mardi midi et dimanche soir."},
-  {id:"cambrousse", n:"Cambrousse", v:"Saint-Cyr-en-Arthies", z:"Vexin", t:25, p:70, s:["CHIC","GAS","TER"],
+   w:"Pour une occasion : cuisine soignée, menus dégustation.", g:"16 Grande Rue · Gault&Millau 12/20 · 45 à 82 €",
+   soirs:MA_SA, hv:true, h:"Fermé lundi, mardi midi et dimanche soir (office de tourisme)."},
+  {id:"cambrousse", n:"Cambrousse", v:"Saint-Cyr-en-Arthies", z:"Vexin", t:25, p:85, s:["CHIC","GAS","TER"],
    a:"Château de la Bûcherie dans un parc classé de 60 hectares.",
-   w:"Le grand soir à la campagne, à 25 min de chez vous.", g:"5 rue du Parc · Gault&Millau 12,5/20 · 65 à 95 €",
-   soirs:null, h:"Fermé lundi et mardi. Soirs à vérifier."},
+   w:"Le grand soir à la campagne, à 25 min de chez vous.", g:"5 rue du Parc · Gault&Millau 12,5/20 · 65 à 95 € (plus de 100 € par personne selon Google)",
+   soirs:["me","je","ve","sa"], hv:true, h:"Mer.-sam. 12h-13h30 et 19h-21h30 · dimanche midi · fermé lundi et mardi."},
   {id:"bords-seine-rg", n:"Les Bords de Seine", v:"La Roche-Guyon", z:"Vexin", t:30, p:30, s:["EAU","TER"],
    a:"Face à la Seine, dans l'un des plus beaux villages de France.",
-   w:"Le cadre avant tout : cuisine simple, avis partagés sur l'assiette.", g:"Menu 33 € · menu du jour 17,90 à 22,90 €",
-   soirs:ALL7, hv:true, h:"Tous les jours 12h-14h et 19h-21h, du 5 janvier au 15 décembre."},
+   w:"Le cadre avant tout : cuisine simple, avis partagés sur l'assiette.", g:"21 rue du Docteur-Duval · menu 33 € · menu du jour 17,90 à 22,90 €",
+   soirs:ALL7, hv:true, h:"Hôtel-restaurant ouvert tous les jours (jusqu'à 22h), du 5 janvier au 15 décembre."},
   {id:"relais-chateau-rg", n:"Le Relais du Château", v:"La Roche-Guyon", z:"Vexin", t:30, p:22, s:["TER","BRA"],
    a:"Brasserie familiale au pied du château, terrasse au soleil.",
-   w:"Plats maison et accueil très chaleureux d'après les avis.", g:"Plats de 4,50 à 16,50 €",
-   soirs:null, h:"Plutôt le midi. Soirs à vérifier."},
-  {id:"panoramique", n:"Le Panoramique (Domaine de la Corniche)", v:"Rolleboise", z:"Vexin", t:40, p:85, s:["CHIC","GAS","EAU"], star:1,
+   w:"Plats maison et accueil très chaleureux d'après les avis.", g:"20 à 30 € par personne (Google) · plats de 4,50 à 16,50 €",
+   soirs:["lu","ma","je","ve","sa","di"], hv:true, h:"Tous les jours 8h-21h (dîner tôt) · mercredi 9h-15h seulement."},
+  {id:"panoramique", n:"Le Panoramique (Domaine de la Corniche)", v:"Rolleboise", z:"Vexin", t:40, p:95, s:["CHIC","GAS","EAU"], star:1,
    a:"Terrasse à couper le souffle au-dessus de la Seine, près de Giverny.",
-   w:"Table locavore étoilée pour une très grande occasion.", g:"1 étoile Michelin · Gault&Millau 14/20 · menu 59 €, carte jusqu'à 118 € · brunch dimanche 55 €",
-   soirs:["me"], ps:true, h:"Fermé lundi et mardi · mercredi 19h-21h · autres soirs à vérifier."},
+   w:"Table locavore étoilée pour une très grande occasion.", g:"1 étoile Michelin · Gault&Millau 14/20 · plus de 100 € par personne (Google) · menu 59 €, carte jusqu'à 118 €",
+   soirs:["me","je","ve","sa"], hv:true, h:"Mer.-sam. 12h-13h30 et 19h-21h15 · fermé dimanche, lundi et mardi."},
 
   // Cergy-Pontoise
-  {id:"maupertu", n:"Le Maupertu", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:49, s:["CHIC","TER"],
+  {id:"maupertu", n:"Le Maupertu", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:52, s:["CHIC","TER"],
    a:"Maison bourgeoise en bord d'Oise, ambiance feutrée et cosy.",
-   w:"Maître cuisinier, menu très apprécié pour son rapport qualité/prix.", g:"Menu 48-49 €",
+   w:"Maître cuisinier, menu très apprécié pour son rapport qualité/prix.", g:"Menu 48-49 € · 50 à 100 € par personne (Google)",
    soirs:["lu","ma","je","ve","sa"], hv:true, h:"Soirs 19h30-22h · fermé le mercredi · dimanche midi seulement."},
   {id:"orqidee", n:"L'Or Q'Idée", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:110, s:["CHIC","GAS"], star:1,
    a:"Grande salle élégante sous la cathédrale, cuisine et cave vitrées. Romantique.",
-   w:"La seule table étoilée du Val-d'Oise (plus une étoile verte).", g:"1 étoile Michelin · Gault&Millau 15/20 · carte blanche 110 € · déjeuner 62 €",
-   soirs:null, h:"Ouvert du lundi au samedi. Soirs probablement jeu.-sam. seulement : à confirmer."},
+   w:"La seule table étoilée du Val-d'Oise (plus une étoile verte).", g:"14 rue Marcel-Rousier · 1 étoile Michelin · Gault&Millau 15/20 · carte blanche 110 € · déjeuner 62 €",
+   soirs:["ma","je","ve"], hv:true, h:"Soirs mardi, jeudi et vendredi · midi mar.-ven. · fermé samedi, dimanche et lundi."},
   {id:"bonne-entente", n:"La Bonne Entente", v:"Pontoise", z:"Cergy-Pontoise", t:20, p:26, s:["BR","TER"],
    a:"Petit bistrot et bar à vin sur les hauteurs du vieux Pontoise.",
-   w:"Pour un verre et des assiettes simples dans le vieux centre.", g:"21 à 30 €",
-   soirs:["je","ve"], hv:true, h:"Jeu.-ven. jusqu'à minuit · lun.-mer. et sam. fermeture 20h30 · fermé le dimanche."},
+   w:"Pour un verre et des assiettes simples dans le vieux centre.", g:"10 à 50 € par personne (Google)",
+   soirs:["lu","ma","me","je","ve","sa"], hv:true, h:"Lun.-jeu. 10h-minuit, ven.-sam. 10h-1h · fermé le dimanche."},
   {id:"petit-feu", n:"Le Petit Feu", v:"Osny", z:"Cergy-Pontoise", t:15, p:18, s:["BIS","MON"],
    a:"Restaurant moderne, banquettes bleu foncé, toit-terrasse.",
-   w:"Très bien noté (4,9/5). Uber Eats le classe en cuisine turque, grecque et française : à confirmer sur place.", g:"10 rue du Petit Albi · prix moyen 18 € (TheFork)",
-   soirs:["lu","ma","me","je","ve","sa"], hv:true, h:"Lun.-sam. 11h-15h et 18h30-22h · fermé le dimanche (Google)."},
-  {id:"vigne-gourmande", n:"Auberge de la Vigne Gourmande", v:"Osny", z:"Cergy-Pontoise", t:15, p:45, s:["TER","CHIC"],
-   a:"Salle calme, idéale pour un dîner à deux.",
-   w:"Gastronomie française classique, le chef vient expliquer ses plats.", g:"Parking · prix estimé",
-   soirs:null, h:"Horaires non trouvés : appeler."},
+   w:"Très bien noté (4,9/5). Uber Eats le classe en cuisine turque, grecque et française : à confirmer sur place.", g:"10 rue du Petit Albi · 10 à 20 € par personne (Google)",
+   soirs:["lu","ma","me","je","ve","sa"], hv:true, h:"Lun.-sam. 11h-15h et 18h30-22h · fermé le dimanche."},
 
   // Vallée de l'Oise
   {id:"chemin-peintres", n:"Le Chemin des Peintres", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:35, s:["TER","BIS"],
    a:"Bistrot familial au pied de l'église peinte par Van Gogh, terrasse.",
-   w:"N°1 d'Auvers dans les classements d'avis, portions généreuses.", g:"9,2/10 sur 1 700 avis · prix estimé",
-   soirs:null, h:"Horaires non trouvés : appeler."},
-  {id:"relais-peintres", n:"Le Relais des Peintres", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:34, s:["TER","CHIC"],
+   w:"N°1 d'Auvers dans les classements d'avis, portions généreuses. Uniquement le midi : à garder pour un dimanche.", g:"3 bis rue de Paris · 30 à 40 € par personne (Google)",
+   soirs:[], hv:true, h:"Midi seulement, mer.-dim. 12h-15h · fermé lundi et mardi."},
+  {id:"relais-peintres", n:"Le Relais des Peintres", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:40, s:["TER","CHIC"],
    a:"Relais de poste du XVIIe siècle, très joli cadre.",
-   w:"Maître cuisinier, menu du jour servi aussi le soir.", g:"Gault&Millau 11/20 · menu du jour 27 à 34 € · menu avec accords vins 92 €",
+   w:"Maître cuisinier, menu du jour servi aussi le soir.", g:"Gault&Millau 11/20 · 40 à 90 € par personne (Google) · menu du jour 27 à 34 €",
    soirs:["lu","ma","je","ve","sa"], hv:true, h:"Soirs 19h30-21h30 · fermé le mercredi · dimanche midi seulement."},
-  {id:"lucy", n:"LuCy", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:30, s:["BIS","BR"],
+  {id:"lucy", n:"LuCy", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:45, s:["BIS","BR"],
    a:"Adresse soignée avec bar et cocktails.",
-   w:"Cuisine française raffinée sur produits frais, 4,8/5 sur TheFork.", g:"5 rue Marceau · 21 à 30 €",
-   soirs:["me","je","ve","sa"], hv:true, h:"Mer. 19h-21h, jeu.-sam. 19h-22h · dimanche midi · fermé lun.-mar."},
-  {id:"cordeville", n:"Le Cordeville", v:"Auvers-sur-Oise", z:"Vallée de l'Oise", t:25, p:28, s:["TER"],
-   a:"Restaurant « dans son jus », ambiance chaleureuse.",
-   w:"Cuisine familiale, viandes françaises et légumes locaux.", g:"Prix estimé",
-   soirs:null, h:"Horaires non trouvés : appeler."},
-  {id:"chiquito", n:"Le Chiquito", v:"Méry-sur-Oise", z:"Vallée de l'Oise", t:25, p:85, s:["CHIC","GAS"],
+   w:"Cuisine française raffinée sur produits frais, 4,8/5 sur TheFork.", g:"5 rue Marceau · 40 à 80 € par personne (Google)",
+   soirs:["me","je","ve","sa"], hv:true, h:"Mer.-sam. 12h-15h et 19h-23h (23h30 ven.-sam.) · dimanche midi · fermé lundi et mardi."},
+  {id:"chiquito", n:"Le Chiquito", v:"Méry-sur-Oise", z:"Vallée de l'Oise", t:25, p:95, s:["CHIC","GAS"],
    a:"Maison de caractère, service classique.",
-   w:"Pour une grande occasion à 25 min.", g:"Gault&Millau 13,5/20 · 76 à 92 € · sélection Michelin",
-   soirs:["ma","je","ve","sa"], ps:true, h:"Fermé dimanche et lundi · mercredi soir : sources contradictoires."},
-  {id:"mauricette", n:"Mauricette", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:32, s:["BRA","TER","CHIC"],
+   w:"Pour une grande occasion à 25 min.", g:"Gault&Millau 13,5/20 · 76 à 117 € · sélection Michelin",
+   soirs:["ma","je","ve","sa"], hv:true, h:"Soirs mar., jeu.-sam. 19h30-21h · mercredi midi seulement · fermé dimanche et lundi."},
+  {id:"mauricette", n:"Mauricette", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:38, s:["BRA","TER","CHIC"],
    a:"Brasserie familiale avec verrière, déco bistrot moderne. Très appréciée en couple.",
-   w:"N°1 de L'Isle-Adam dans les avis (8,4/10 sur plus de 1 000 avis).", g:"6 place du Pâtis · menu entrée-plat-dessert 18,50 € (midi)",
-   soirs:null, h:"Ouvert le soir d'après les avis. Jours à vérifier."},
-  {id:"table-cassan", n:"La Table de Cassan", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:33, s:["TER"],
+   w:"N°1 de L'Isle-Adam dans les avis (8,4/10 sur plus de 1 000 avis).", g:"6 place du Pâtis · 30 à 60 € par personne (Google) · menu entrée-plat-dessert 18,50 € (midi)",
+   soirs:ALL7, hv:true, h:"Tous les jours, midi et soir (19h-minuit)."},
+  {id:"table-cassan", n:"La Table de Cassan", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:35, s:["TER"],
    a:"Restaurant de quartier soigné.",
-   w:"Produits frais, très bien noté (8,4/10).", g:"2 av. Michel-Poniatowski · formule plat + dessert 31 €",
-   soirs:["ve","sa"], hv:true, h:"Soirs ven.-sam. seulement · fermé le lundi (site de la ville)."},
-  {id:"eleven", n:"L'Eleven (Le Nautilus ?)", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:32, s:["EAU","BRA"],
+   w:"Produits frais, très bien noté (8,4/10).", g:"2 av. Michel-Poniatowski · 20 à 60 € par personne (Google) · formule plat + dessert 31 €",
+   soirs:["ve","sa"], hv:true, h:"Soirs ven.-sam. 19h30-21h30 · midi mar.-dim. · fermé le lundi."},
+  {id:"eleven", n:"Le Nautilus (ex-L'Eleven)", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:38, s:["EAU","BRA"],
    a:"Terrasse sur l'Oise face à la plage de L'Isle-Adam.",
-   w:"Carte élaborée. Des avis de 2026 parlent d'un nouveau nom, « Le Nautilus » : à confirmer.", g:"11 rue de Conti · formule entrée-plat-dessert 31,50 €",
-   soirs:["lu","me","je","ve","sa"], ps:true, h:"Réservable lun. et mer.-sam. 19h-minuit · mardi et dimanche à vérifier."},
-  {id:"le-nid", n:"Le Nid", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:40, s:["EAU","BR"],
+   w:"L'Eleven est devenu Le Nautilus (confirmé sur Google).", g:"11 rue de Conti · 30 à 50 € par personne (Google)",
+   soirs:ALL7, hv:true, h:"Tous les jours 12h-14h30 et 19h-22h (22h30 vendredi et samedi)."},
+  {id:"le-nid", n:"Le Nid", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:45, s:["EAU","BR"],
    a:"Restaurant-terrasse sur la berge, déco d'architecte.",
-   w:"Cuisine de bord de mer au bord de l'Oise. Brunch le dimanche.", g:"15 quai de l'Oise · formule midi en semaine",
-   soirs:ALL7, hv:true, h:"Ouvert tous les jours, réservable de 12h à 1h."},
-  {id:"plage-isle-adam", n:"Restaurant de la Plage", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:32, s:["EAU","CHIC","TER"],
+   w:"Cuisine de bord de mer au bord de l'Oise. Brunch le dimanche.", g:"15 quai de l'Oise · 40 à 50 € par personne (Google) · formule midi en semaine",
+   soirs:ALL7, hv:true, h:"Tous les jours, midi et soir (19h-minuit, 22h le dimanche)."},
+  {id:"plage-isle-adam", n:"Restaurant de la Plage", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:35, s:["EAU","CHIC","TER"],
    a:"Maison de 1895, vue sur la plus grande plage fluviale de France, ambiance chic.",
-   w:"Cuisine traditionnelle à prix raisonnables.", g:"1 av. du Général-de-Gaulle · menu environ 30 €",
-   soirs:["ma","me","je","ve","sa"], ps:true, h:"Fermé le lundi · mar.-mer. 12h-14h et 19h30-21h30 · « midi et soir toute l'année ». Dimanche soir à vérifier."},
-  {id:"cambuse", n:"La Cambuse", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:28, s:["TER"],
+   w:"Cuisine traditionnelle à prix raisonnables.", g:"1 av. du Général-de-Gaulle · 20 à 60 € par personne (Google) · menu environ 30 €",
+   soirs:["ma","me","je","ve","sa","di"], hv:true, h:"Mar.-dim. 12h-14h et 19h30-22h · fermé le lundi."},
+  {id:"cambuse", n:"La Cambuse", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:26, s:["TER"],
    a:"Adresse conviviale et gourmande.",
-   w:"Viandes, poissons, foie gras : une valeur sûre locale (4,6/5).", g:"71 rue de Pontoise · 20 à 30 €",
-   soirs:null, h:"Horaires à vérifier."},
-  {id:"ami-pinot", n:"L'Ami Pinot", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:35, s:["BR","BIS"],
+   w:"Viandes, poissons, foie gras : une valeur sûre locale (4,6/5).", g:"71 rue de Pontoise · 20 à 30 € par personne (Google)",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. 10h-14h et 19h-22h30 · fermé dimanche et lundi."},
+  {id:"ami-pinot", n:"L'Ami Pinot", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:32, s:["BR","BIS"],
    a:"Bar à vins nature et restaurant, place du Pâtis.",
-   w:"Pour une soirée vins et assiettes (tartare de thon…).", g:"8 place du Pâtis · prix estimé",
-   soirs:null, h:"Horaires à vérifier."},
-  {id:"charbon", n:"Le Charbon", v:"L'Isle-Adam", z:"Vallée de l'Oise", t:30, p:45, s:["BR","BIS"],
-   a:"Terrasse sur le golf, concerts, happy hour, cocktails (environ 18 €).",
-   w:"Statut incertain : avis mitigés, et l'adresse a peut-être changé de concept. Appeler avant.", g:"Golf de L'Isle-Adam",
-   soirs:null, h:"À vérifier."},
-  {id:"la-plume", n:"La Plume", v:"Presles", z:"Vallée de l'Oise", t:35, p:59, s:["CHIC","GAS"],
-   a:"Au Domaine des Vanneaux (golf et spa), potager et ruches. Romantique.",
-   w:"Cuisine d'auteur, un vrai cran au-dessus pour le prix.", g:"Gault&Millau 13,5/20 · 59 €",
-   soirs:null, h:"Fermé du lundi au mercredi. Autres soirs à vérifier."},
-  {id:"epis-or", n:"Les Épis d'Or", v:"Champagne-sur-Oise", z:"Vallée de l'Oise", t:35, p:45, s:["TER","CHIC"],
+   w:"Pour une soirée vins et assiettes (tartare de thon…).", g:"8 place du Pâtis · 20 à 40 € par personne (Google)",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. 12h-14h30 et 19h-minuit · fermé dimanche et lundi."},
+  {id:"le-piaf", n:"Le Piaf (Domaine des Vanneaux)", v:"Presles", z:"Vallée de l'Oise", t:35, p:45, s:["BIS","BR","CHIC"],
+   a:"Bar-restaurant de l'hôtel du Domaine des Vanneaux, terrasse face au golf, cheminée.",
+   w:"Nouveau dans la liste : remplace La Plume, la table gastronomique du domaine, fermée. Cocktails réputés, brunch à volonté le dimanche.", g:"1 route du Golf des Vanneaux · 40 à 80 € par personne (Google) · 4,4/5",
+   soirs:ALL7, hv:true, h:"Tous les jours 12h-22h."},
+  {id:"epis-or", n:"Les Épis d'Or", v:"Champagne-sur-Oise", z:"Vallée de l'Oise", t:35, p:40, s:["TER","CHIC"],
    a:"Salle rustique (poutres, pierre), terrasse qui surplombe la vallée de l'Oise.",
-   w:"Tout fait maison, soirées à thème chaque mois.", g:"Gault&Millau 12/20 · menu du soir 36 € · carte environ 49 €",
+   w:"Tout fait maison, soirées à thème chaque mois.", g:"Gault&Millau 12/20 · 30 à 40 € par personne (Google) · menu du soir 36 € · carte environ 49 €",
    soirs:["ma","je","ve","sa"], hv:true, h:"Soirs 19h-21h30 · mercredi midi seulement · fermé dimanche et lundi."},
 
   // Boucle de Seine
-  {id:"obistronome", n:"O'Bistronome", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:49, s:["BIS","CHIC"],
+  {id:"obistronome", n:"O'Bistronome", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:52, s:["BIS","CHIC"],
    a:"Véranda ouverte sur un jardin zen, calme et élégant.",
-   w:"L'adresse la plus courue de Conflans, tartare préparé en salle.", g:"171 av. Carnot · menu du soir 49 € · déjeuner 31 € · réserver",
-   soirs:MA_SA, hv:true, h:"Fermé dimanche et lundi."},
-  {id:"obistro-cote", n:"O'Bistro d'à Côté", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:35, s:["BIS"],
+   w:"L'adresse la plus courue de Conflans, tartare préparé en salle.", g:"171 av. Carnot · 40 à 80 € par personne (Google) · menu du soir 49 € · déjeuner 31 € · réserver",
+   soirs:["ma","je","ve","sa"], hv:true, h:"Soirs mar. et jeu. 19h-20h30, ven.-sam. 19h-21h · mercredi midi seulement · fermé dimanche et lundi."},
+  {id:"obistro-cote", n:"O'Bistro d'à Côté", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:40, s:["BIS"],
    a:"Le petit frère d'O'Bistronome, salle intimiste et moderne.",
-   w:"Poissons et fruits de mer de saison, un peu moins cher que le grand frère.", g:"160 av. Carnot · prix estimé",
-   soirs:null, h:"Horaires à vérifier."},
-  {id:"berges-bonheur", n:"Aux Berges du Bonheur", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:35, s:["EAU","CHIC"],
+   w:"Poissons et fruits de mer de saison, un peu moins cher que le grand frère.", g:"160 av. Carnot · 30 à 80 € par personne (Google)",
+   soirs:["ma","me","ve","sa"], hv:true, h:"Soirs mar.-mer. 19h-20h30, ven.-sam. 19h-21h · jeudi midi seulement · fermé dimanche et lundi."},
+  {id:"berges-bonheur", n:"Aux Berges du Bonheur", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:40, s:["EAU","CHIC"],
    a:"Véranda avec vue sur la Seine, ambiance feutrée, terrasse l'été.",
-   w:"Côte de bœuf, tartare d'espadon, foie gras maison. 4,7/5 sur 869 avis.", g:"15 quai des Martyrs-de-la-Résistance · menu environ 35 €",
-   soirs:null, h:"Horaires à vérifier."},
-  {id:"bijou-revel", n:"Bijou Bar", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:30, s:["BR","EAU"],
+   w:"Côte de bœuf, tartare d'espadon, foie gras maison. 4,7/5 sur 869 avis.", g:"15 quai des Martyrs-de-la-Résistance · 30 à 70 € par personne (Google) · menu environ 35 €",
+   soirs:ALL7, hv:true, h:"Tous les jours midi et 19h-21h30 (22h le samedi)."},
+  {id:"bijou-revel", n:"Bijou Bar", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:32, s:["BR","EAU"],
    a:"Bar-restaurant animé au bord de l'eau, plus de 200 bières et des whiskys.",
-   w:"Cocktails très réussis, planches et plats copieux à prix raisonnables.", g:"19 rue René-Albert",
-   soirs:["lu","ma","me","di"], ps:true, h:"Lun.-mar. et dim. 19h-21h30, mer. 18h30-22h · jeu.-sam. non affichés dans la source."},
-  {id:"bateau-chocolate", n:"Le Bateau Chocolaté", v:"Conflans-Sainte-Honorine", z:"Boucle de Seine", t:30, p:29, s:["MON","EAU"],
-   a:"Péniche Freycinet des années 60 amarrée sur la Seine.",
-   w:"Cuisine créole (colombo, poulet boucané), soirées à thème. 9,1/10 sur 1 489 avis.", g:"Place Fouillère · budget moyen 29 € · brunch 38 €",
-   soirs:null, h:"Horaires à vérifier."},
-  {id:"avant-seine", n:"L'Avant Seine", v:"Andrésy", z:"Boucle de Seine", t:30, p:32, s:["EAU","BRA"],
+   w:"Cocktails très réussis, planches et plats copieux à prix raisonnables.", g:"19 rue René-Albert · 30 à 40 € par personne (Google)",
+   soirs:ALL7, hv:true, h:"Tous les jours midi et soir : dim. 19h-21h, lun.-mar. 19h-21h30, mer. 19h-22h, jeu. 18h30-22h, ven.-sam. 18h30-22h30."},
+  {id:"avant-seine", n:"L'Avant Seine", v:"Andrésy", z:"Boucle de Seine", t:30, p:28, s:["EAU","BRA"],
    a:"Face au fleuve au cœur du village, soirées jazz.",
-   w:"Bistrot-brasserie, produits frais, cocktails.", g:"44 bd Noël-Marc · 25 à 40 €",
-   soirs:null, h:"Horaires à vérifier."},
-  {id:"la-cucina", n:"La Cucina Pane Amore e Fantasia", v:"Andrésy", z:"Boucle de Seine", t:30, p:28, s:["ITA","EAU"],
+   w:"Bistrot-brasserie, produits frais, cocktails.", g:"46 bd Noël-Marc · 20 à 30 € par personne (Google)",
+   soirs:["ve","sa"], hv:true, h:"Dîner vendredi et samedi seulement (jusqu'à 23h30) · les autres jours 8h-18h · fermé le mardi."},
+  {id:"la-cucina", n:"La Cucina Pane Amore e Fantasia", v:"Andrésy", z:"Boucle de Seine", t:30, p:25, s:["ITA","EAU"],
    a:"Trattoria, salon de thé et épicerie fine, esprit cinéma italien des années 50.",
-   w:"Pizzas et pâtes maison, au bord de la Seine.", g:"46 bd Noël-Marc · 20 à 35 €",
-   soirs:null, h:"Horaires à vérifier."},
-  {id:"tastevin", n:"Le Tastevin", v:"Maisons-Laffitte", z:"Boucle de Seine", t:40, p:70, s:["CHIC","GAS"],
-   a:"Maison bourgeoise au calme, terrasse dans le jardin.",
-   w:"Cuisine classique précise (raviole de homard), cave bordelaise.", g:"9 av. Eglé · Gault&Millau 12,5/20 · Assiette Michelin · 43 à 99 € · déjeuner 54 €",
-   soirs:["me"], ps:true, h:"Fermé lundi et mardi · mercredi 19h30-21h30 · autres soirs à vérifier."},
-  {id:"la-plancha", n:"La Plancha (de Kiko)", v:"Maisons-Laffitte", z:"Boucle de Seine", t:40, p:45, s:["MON","BIS"],
+   w:"Pizzas et pâtes maison, au bord de la Seine.", g:"Bd Noël-Marc · 20 à 30 € par personne (Google)",
+   soirs:["me","je","ve","sa"], hv:true, h:"Soirs mer.-sam. 18h30-23h · mardi midi seulement · fermé dimanche et lundi."},
+  {id:"la-plancha", n:"La Plancha (de Kiko)", v:"Maisons-Laffitte", z:"Boucle de Seine", t:40, p:50, s:["MON","BIS"],
    a:"Maison bourgeoise face à la gare, déco classique et moderne.",
-   w:"Turbot à la plancha, profiteroles très réputées. 4,8/5.", g:"5 av. de Saint-Germain · Gault&Millau 12/20 · Assiette Michelin · menu 39 €, entrée-plat-dessert 50 €",
-   soirs:ALL7, hv:true, h:"Tous les soirs 19h-23h30 · midi sauf mardi et mercredi."},
-  {id:"wauthier", n:"Le Wauthier by Cagna", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:70, s:["CHIC","BIS"],
+   w:"Turbot à la plancha, profiteroles très réputées. 4,8/5.", g:"5 av. de Saint-Germain · Gault&Millau 12/20 · Assiette Michelin · 50 à 60 € par personne (Google) · menu 39 €",
+   soirs:["lu","je","ve","sa"], hv:true, h:"Soirs lun. et jeu.-sam. 19h30-22h · dimanche midi · fermé mardi et mercredi."},
+  {id:"comptoirs-deux-freres", n:"Comptoirs des Deux Frères", v:"Maisons-Laffitte", z:"Boucle de Seine", t:40, p:42, s:["BIS","MON"],
+   a:"Bistrot de deux frères, cuisine française aux accents ibériques.",
+   w:"Nouveau dans la liste : remplace Le Tastevin (fermé) à Maisons-Laffitte. Gault&Millau 11/20.", g:"40 à 50 € par personne (Google) · environ 40 € d'après Gault&Millau",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. 12h-13h45 et 18h-21h45 · fermé dimanche et lundi."},
+  {id:"wauthier", n:"Le Wauthier by Cagna", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:75, s:["CHIC","BIS"],
    a:"Bistrot chic et intime caché dans une rue du centre.",
-   w:"Menu à 79 € tout compris (champagne, vin, café) très apprécié.", g:"Sélection Michelin · menu 79 € boissons comprises",
-   soirs:MA_SA, hv:true, h:"Fermé dimanche et lundi · mercredi soir seulement."},
-  {id:"bistrot-logique", n:"Le Bistrot Logique", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:39, s:["BIS","TER"],
-   a:"Bistronomique, décor clair et moderne.",
-   w:"Fait maison, terroir, entrée-plat-dessert 39 €.", g:"8 bis av. Carnot",
-   soirs:null, h:"Horaires à vérifier."},
-  {id:"le-manege", n:"Le Manège", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:35, s:["TER","BIS"],
+   w:"Menu à 79 € tout compris (champagne, vin, café) très apprécié.", g:"Sélection Michelin · 70 à 80 € par personne (Google) · menu 79 € boissons comprises",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. 19h45-21h · midi mar., jeu.-sam. · fermé dimanche et lundi."},
+  {id:"cazaudehore", n:"Cazaudehore", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:70, s:["CHIC","TER"],
+   a:"Grande maison en lisière de la forêt de Saint-Germain, terrasse sous les arbres.",
+   w:"Nouveau dans la liste : une institution de Saint-Germain, Gault&Millau 13,5/20, cave de plus de 400 références.", g:"1 av. du Président-Kennedy · menu carte 69 € · menu déjeuner 39-44 € · brunch le dimanche",
+   soirs:["lu","ma","me","je","ve","sa"], hv:true, h:"Fermé le dimanche soir et le lundi midi."},
+  {id:"le-manege", n:"Le Manège", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:33, s:["TER","BIS"],
    a:"Pierres, poutres, cave voûtée et plaques émaillées rétro, à deux pas du château.",
-   w:"Maître restaurateur, tout est fait maison.", g:"5 rue Saint-Louis · menus 19,50 à 24,50 € · dégustation 41,50 €",
-   soirs:ALL7, hv:true, h:"Tous les jours (lun.-jeu. 19h-22h, ven.-sam. 19h30-23h, dim. 19h-21h). Le guide Pudlowski le dit fermé le dimanche soir : appeler."},
-  {id:"fulcosa", n:"Au Fulcosa", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:38, s:["BIS","TER"],
-   a:"Bistrot culinaire chaleureux à Fourqueux.",
-   w:"Cuisine de saison, ne pas rater le soufflé chaud.", g:"2 rue du Maréchal-Foch · Gault&Millau 12/20 · 25 à 43 €",
-   soirs:MA_SA, hv:true, h:"Mar.-sam. 12h-14h et 19h15-21h15 · fermé dimanche et lundi (Michelin)."},
-  {id:"toucan", n:"Le Toucan", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:35, s:["BIS","CHIC"],
+   w:"Maître restaurateur, tout est fait maison.", g:"5 rue Saint-Louis · 30 à 40 € par personne (Google) · menus 19,50 à 24,50 € · dégustation 41,50 €",
+   soirs:ALL7, hv:true, h:"Tous les jours 12h-22h (22h30 vendredi à dimanche)."},
+  {id:"toucan", n:"Le Toucan", v:"Saint-Germain-en-Laye", z:"Boucle de Seine", t:40, p:28, s:["BIS","CHIC"],
    a:"Bistrot chic face au château : mur végétal, bambou, osier, terrasse.",
-   w:"Fait maison, classiques revisités avec des touches du monde.", g:"18 place Charles-de-Gaulle · prix estimé",
-   soirs:null, h:"Horaires à vérifier."},
+   w:"Fait maison, classiques revisités avec des touches du monde.", g:"18 place Charles-de-Gaulle · 20 à 30 € par personne (Google)",
+   soirs:ALL7, hv:true, h:"Tous les jours, de 8h à minuit (1h vendredi et samedi)."},
 
   // Val-d'Oise est
-  {id:"vin-sur-vin", n:"Vin sur Vin", v:"Ermont", z:"Val-d'Oise est", t:35, p:75, s:["CHIC","GAS"],
+  {id:"vin-sur-vin", n:"Vin sur Vin", v:"Ermont", z:"Val-d'Oise est", t:35, p:70, s:["CHIC","GAS"],
    a:"Petite salle cossue, bonne sélection de vins nature.",
-   w:"Menu unique qui change chaque semaine. Bien moins cher le midi (43 €).", g:"122 rue de Sannois · Gault&Millau 13/20 · menu du soir 74 à 78 €",
-   soirs:["je","ve","sa"], hv:true, h:"Dîner jeu.-sam. seulement · midi mar.-sam. · fermé dimanche et lundi."},
-  {id:"odistingo", n:"O'Distingo", v:"Eaubonne", z:"Val-d'Oise est", t:35, p:50, s:["BIS","CHIC"],
+   w:"Menu unique qui change chaque semaine. Bien moins cher le midi.", g:"122 rue de Sannois · Gault&Millau 13/20 · 48 à 78 € · 40 à 100 € par personne (Google)",
+   soirs:["ma","je","ve","sa"], hv:true, h:"Soirs mar. et jeu.-sam. 20h-23h · midi mar.-sam. · fermé dimanche et lundi."},
+  {id:"odistingo", n:"O'Distingo", v:"Eaubonne", z:"Val-d'Oise est", t:35, p:60, s:["BIS","CHIC"],
    a:"Lieu élégant mais chaleureux.",
-   w:"Cuisine raffinée, parfois conceptuelle. Un guide trouve les prix « vigoureux ».", g:"12 av. de l'Europe · Gault&Millau 12,5/20 · prix estimé",
-   soirs:MA_SA, hv:true, h:"Soirs mar.-sam. 19h-23h30 · dimanche midi · fermé le lundi."},
-  {id:"les-3m", n:"Les 3M", v:"Cormeilles-en-Parisis", z:"Val-d'Oise est", t:35, p:42, s:["BR","BIS"],
+   w:"Cuisine raffinée, parfois conceptuelle. Un guide trouve les prix « vigoureux ».", g:"12 av. de l'Europe · Gault&Millau 12,5/20 · 50 à 100 € par personne (Google)",
+   soirs:MA_SA, hv:true, h:"Soirs mar.-sam. 19h30-23h (23h30 ven.-sam.) · dimanche midi · fermé le lundi."},
+  {id:"les-3m", n:"Les 3M", v:"Cormeilles-en-Parisis", z:"Val-d'Oise est", t:35, p:45, s:["BR","BIS"],
    a:"Bistrot chic et bar-lounge en pleine forêt, grande terrasse, concerts le jeudi.",
-   w:"Cuisine de la cheffe Yona Picot, près de 2 000 avis à 4,6/5.", g:"21 route Stratégique · 30 à 55 €",
-   soirs:null, h:"Horaires à vérifier."},
+   w:"Cuisine de la cheffe Yona Picot, près de 2 000 avis à 4,6/5.", g:"21 route Stratégique · 30 à 70 € par personne (Google)",
+   soirs:ALL7, hv:true, h:"Tous les jours 9h-22h."},
 
   // Normandie & Oise
-  {id:"cappeville", n:"Le Cappeville", v:"Gisors", z:"Normandie & Oise", t:25, p:45, s:["TER","CHIC"],
-   a:"Une institution de Gisors tenue par la famille Potel.",
-   w:"Cuisine normande modernisée (soufflé au calva…).", g:"17 rue Cappeville · Gault&Millau 12/20 · menus 23 à 75 €",
-   soirs:null, h:"Horaires à vérifier."},
   {id:"ecrin-saveurs", n:"L'Écrin des Saveurs", v:"Gisors", z:"Normandie & Oise", t:25, p:26, s:["TER","BR"],
    a:"Crêperie près du château, terrasse.",
    w:"Crêpes et galettes, cocktails très appréciés, options végétariennes. 4,4/5 sur 766 avis Google.", g:"28 rue du Faubourg-de-Neaufles · 02 77 14 12 97 · 20 à 30 €",
-   soirs:["lu","ma","ve","sa","di"], hv:true, h:"Soirs lun., mar. et dim. 19h-21h, ven.-sam. 19h-21h30 · mer.-jeu. midi seulement (Google)."},
-  {id:"oscar-giverny", n:"Oscar", v:"Giverny", z:"Normandie & Oise", t:40, p:39, s:["BIS","TER","CHIC"],
+   soirs:["lu","ma","ve","sa","di"], hv:true, h:"Soirs lun., mar. et dim. 19h-21h, ven.-sam. 19h-21h30 · mer.-jeu. midi seulement."},
+  {id:"oscar-giverny", n:"Oscar", v:"Giverny", z:"Normandie & Oise", t:40, p:39, s:["BIS","TER","CHIC"], ft:true,
    a:"Bistrot chic dans le jardin du musée des Impressionnismes.",
-   w:"Signé David Gallienne (étoilé), menu du soir et du week-end 39 €.", g:"99 rue Claude-Monet · Gault&Millau 12/20 · menu du jour 35 €",
-   soirs:null, h:"Soirs à vérifier, surtout en hiver."},
+   w:"Signé David Gallienne (étoilé), menu du soir et du week-end 39 €.", g:"99 rue Claude-Monet · Gault&Millau 12/20 · 30 à 70 € par personne (Google)",
+   soirs:null, h:"Google l'indique « fermé temporairement » (15 novembre 2026), sans doute la pause d'hiver du musée. À revoir au printemps."},
   {id:"musardiere", n:"La Musardière", v:"Giverny", z:"Normandie & Oise", t:40, p:45, s:["TER","CHIC"],
    a:"Hôtel de charme du XIXe siècle avec jardin.",
    w:"Bistronomie le midi (« Le M »), dîner plus ambitieux (« Révélations »).", g:"123 rue Claude-Monet · Gault&Millau 11,5/20 · Assiette Michelin · 35 à 49 €",
-   soirs:null, h:"Horaires à vérifier."},
+   soirs:["ve","sa","di"], hv:true, h:"Horaires actuels (hiver) : vendredi soir, samedi et dimanche midi et soir · fermé du lundi au jeudi."},
   {id:"jardin-plumes", n:"Le Jardin des Plumes", v:"Giverny", z:"Normandie & Oise", t:40, p:150, s:["CHIC","GAS"], star:1,
    a:"Maison anglo-normande de 1912 et jardin.",
    w:"La grande table étoilée de David Gallienne, pour un anniversaire.", g:"1 rue du Milieu · 1 étoile Michelin · Gault&Millau 16/20 · 150 à 180 €",
-   soirs:null, h:"Fermé lundi et mardi. Autres soirs à vérifier."},
+   soirs:["me","je","ve","sa","di"], hv:true, h:"Soirs mer.-dim. 19h15-21h · midi ven.-dim. · fermé lundi et mardi."},
   {id:"senso", n:"Senso", v:"Beauvais", z:"Normandie & Oise", t:45, p:45, s:["BIS","BR"],
    a:"Restaurant, cave et bar à vin sur la place du marché.",
-   w:"Cuisine de saison soignée, kouign-amann maison réputé.", g:"25 rue d'Agincourt · Gault&Millau 12,5/20 · Assiette Michelin · 21 à 65 € · déjeuner 26 €",
-   soirs:MA_SA, hv:true, h:"Mar.-sam. midi et soir (dîner 19h30 à 21h15-21h30) · fermé dimanche et lundi (Michelin)."},
-  {id:"gargouille", n:"La Gargouille", v:"Beauvais", z:"Normandie & Oise", t:45, p:55, s:["TER","CHIC"],
+   w:"Cuisine de saison soignée, kouign-amann maison réputé.", g:"25 rue d'Agincourt · Gault&Millau 12,5/20 · Assiette Michelin · 30 à 70 € par personne (Google) · déjeuner 26 €",
+   soirs:MA_SA, hv:true, h:"Mar.-sam. midi et 19h30-21h15 (21h30 ven.-sam.) · fermé dimanche et lundi."},
+  {id:"gargouille", n:"La Gargouille", v:"Beauvais", z:"Normandie & Oise", t:45, p:65, s:["TER","CHIC"],
    a:"Face à la cathédrale, jolie salle en mezzanine au décor original.",
-   w:"Bistrot à dimension gastronomique, menus à l'aveugle.", g:"75 rue Saint-Pierre · Gault&Millau 12/20 · 35 à 85 € · menus 70 et 85 €",
-   soirs:null, h:"Horaires à vérifier."}
+   w:"Bistrot à dimension gastronomique, menus à l'aveugle.", g:"75 rue Saint-Pierre · Gault&Millau 12/20 · menus 70 et 85 €",
+   soirs:["lu","ma","me","je","ve"], hv:true, h:"Lun.-ven. 12h15-13h30 et 19h15-21h30 · fermé samedi et dimanche."}
 ];
 
 /* ---------- Questionnaire (points cachés) ---------- */
@@ -765,9 +759,10 @@ function ghBadge(err){
   b.title= gh&&ghLast? "Dernière mise à jour à "+ghLast.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}) : "";
 }
 function ghInit(){
-  const u=new URL(location.href), q=u.searchParams.get("sync");
+  const u=new URL(location.href), hm=location.hash.match(/^#sync=(.+)$/);
+  const q= hm? decodeURIComponent(hm[1]) : u.searchParams.get("sync");
   if(q){
-    u.searchParams.delete("sync"); history.replaceState(null,"",u.pathname+u.search+u.hash);
+    u.searchParams.delete("sync"); history.replaceState(null,"",u.pathname+u.search+(hm?"":u.hash));
     try{ const c=JSON.parse(b64d(q)); if(c&&c.token&&c.owner&&c.repo){ ghActivate({branch:"main",path:"donnees.json",...c}).then(()=>toast("Synchronisation activée sur ce téléphone")).catch(e=>{ toast(ghErrMsg(e)); openSync(c); }); } }catch(e){ toast("Lien de connexion invalide."); }
   } else if(gh){ ghRefresh(); }
   ghBadge(); showNotice();
@@ -793,7 +788,7 @@ function openSync(pref){
   const f=dlg.querySelector("#sync-form");
   const off=f.querySelector("#g-off"); if(off) off.addEventListener("click",()=>{ ghStore(null); ghBadge(); showNotice(); dlg.close(); toast("Synchronisation désactivée sur ce téléphone"); });
   const lk=f.querySelector("#g-link"); if(lk) lk.addEventListener("click",async()=>{
-    const u=new URL(location.href); u.hash=""; u.search=""; u.searchParams.set("sync",b64e(JSON.stringify(gh)));
+    const u=new URL(location.href); u.search=""; u.hash="sync="+encodeURIComponent(b64e(JSON.stringify(gh)));
     try{ await navigator.clipboard.writeText(u.toString()); toast("Lien copié : envoyez-le à Claire"); }catch(e){ prompt("Copiez ce lien :",u.toString()); }
   });
   f.addEventListener("submit",async e=>{
@@ -831,18 +826,21 @@ function initFilters(){
   const zones=[...new Set(R.map(r=>r.z))];
   $("#zone").insertAdjacentHTML("beforeend",zones.map(z=>`<option>${esc(z)}</option>`).join(""));
   ["q","tmax","pmax","sort","zone","f-todo","f-envie","f-soir","f-unk","f-vol"].forEach(id=>$("#"+id).addEventListener("input",render));
-  $("#reset").addEventListener("click",()=>{ $("#q").value=""; $("#tmax").value=55; $("#pmax").value=PMAX; $("#sort").value="t"; $("#zone").value=""; $("#f-soir").value=""; ["f-todo","f-envie","f-unk","f-vol"].forEach(i=>$("#"+i).checked=false); ui.styles.clear(); document.querySelectorAll("#styles .chip").forEach(c=>c.setAttribute("aria-pressed","false")); render(); });
+  $("#ftoggle").addEventListener("click",()=>{ const f=$(".filters"), o=!f.classList.contains("open"); f.classList.toggle("open",o); $("#ftoggle").setAttribute("aria-expanded",o); });
+  $("#reset").addEventListener("click",()=>{ $("#q").value=""; $("#tmax").value=TMAX; $("#pmax").value=PMAX; $("#sort").value="t"; $("#zone").value=""; $("#f-soir").value=""; ["f-todo","f-envie","f-unk","f-vol"].forEach(i=>$("#"+i).checked=false); ui.styles.clear(); document.querySelectorAll("#styles .chip").forEach(c=>c.setAttribute("aria-pressed","false")); render(); });
 }
 function render(){
   const st=stats();
   const list=allR();
-  $("#tmax-v").textContent= +$("#tmax").value>=55? "tout" : $("#tmax").value+" min";
+  $("#tmax-v").textContent= +$("#tmax").value>=TMAX? "tout" : $("#tmax").value+" min";
   $("#pmax-v").textContent= +$("#pmax").value>=PMAX? "tout" : $("#pmax").value+" €";
   const q=$("#q").value.trim().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"");
   const tmax=+$("#tmax").value, pmax=+$("#pmax").value, zone=$("#zone").value;
   const todo=$("#f-todo").checked, envie=$("#f-envie").checked, soir=$("#f-soir").value, unk=$("#f-unk").checked, novol=$("#f-vol").checked;
+  const nAct=(tmax<TMAX)+(pmax<PMAX)+!!zone+todo+envie+!!soir+novol+ui.styles.size;
+  $("#ftoggle").textContent= nAct? `Filtres (${nAct})` : "Filtres";
   let rows=list.filter(r=>{
-    if(tmax<55 && r.t>tmax) return false;
+    if(tmax<TMAX && r.t>tmax) return false;
     if(pmax<PMAX && r.p>pmax) return false;
     if(novol && r.vol) return false;
     if(soir){ const st8=soirState(r,soir); if(st8==="off") return false; if(st8==="unk" && !unk) return false; }
@@ -868,6 +866,7 @@ function render(){
 }
 const DAYS=[["lu","L","lundi"],["ma","M","mardi"],["me","M","mercredi"],["je","J","jeudi"],["ve","V","vendredi"],["sa","S","samedi"],["di","D","dimanche"]];
 function soirState(r,day){
+  if(r.ft) return "off";
   if(!Array.isArray(r.soirs)) return "unk";
   if(r.soirs.includes(day)) return "on";
   return r.ps? "unk" : "off";
@@ -896,9 +895,10 @@ function card(r,s){
   const env=state.envies[r.id]&&state.envies[r.id].on;
   const dimTxt = soirsHtml(r);
   let badge="";
-  if(s){ const [vl,vc]=verdict(s.avg); badge=`<span class="badge ${vc}">N°${s.rank} · ${vl}${s.list.length>1?` · ${s.list.length} visites`:""}</span>`; }
-  else if(r.ref){ badge=`<span class="badge" style="color:var(--brass);border-color:var(--brass)">Votre référence</span>`; }
-  else if(r.liked){ badge=`<span class="badge" style="color:var(--brass);border-color:var(--brass)">Déjà aimé</span>`; }
+  if(s){ const [vl,vc]=verdict(s.avg); badge+=`<span class="badge ${vc}">N°${s.rank} · ${vl}${s.list.length>1?` · ${s.list.length} visites`:""}</span>`; }
+  else if(r.ref){ badge+=`<span class="badge" style="color:var(--brass);border-color:var(--brass)">Votre référence</span>`; }
+  else if(r.liked){ badge+=`<span class="badge" style="color:var(--brass);border-color:var(--brass)">Déjà aimé</span>`; }
+  if(r.ft) badge+=`<span class="badge v-decus">Fermé temporairement</span>`;
   const dest=encodeURIComponent(r.n.replace(/\(.*?\)/g,"")+" "+r.v);
   return `<article class="card${s?" tested":""}${(r.ref||r.liked)&&!s?" ref":""}">
     <div class="price">${tier(r.p)}<small>~${r.p} €/pers</small></div>
@@ -931,7 +931,7 @@ function renderRank(st){
     const last=o.list[0];
     const likes=[...new Set(o.list.flatMap(x=>(x.ans&&x.ans.aime)||[]))].map(t=>`<span class="tag plus">+ ${esc(t)}</span>`).join("");
     const dislikes=[...new Set(o.list.flatMap(x=>(x.ans&&x.ans.moins)||[]))].filter(t=>t!=="Rien à redire").map(t=>`<span class="tag minus">− ${esc(t)}</span>`).join("");
-    const visits=o.list.map(x=>`<div class="visit"><span>${x.date?new Date(x.date+"T12:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}):"Date ?"}</span>${x.paye?`<span>· ${esc(x.paye)} € à deux</span>`:""}${show?`<span>· ${x.score}/100</span>`:""}<button class="linkbtn" data-delv="${esc(x.vid)}">Supprimer</button></div>`).join("");
+    const visits=o.list.map(x=>`<div class="visit"><span>${x.date?new Date(x.date+"T12:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}):"Date ?"}</span>${x.paye?`<span>· ${esc(x.paye)} € à deux</span>`:""}${show?`<span>· ${esc(x.score)}/100</span>`:""}<button class="linkbtn" data-delv="${esc(x.vid)}">Supprimer</button></div>`).join("");
     return `<div class="rrow">
       <div class="pos${o.rank<=3?" p"+o.rank:""}">${o.rank}</div>
       <div>
@@ -951,7 +951,8 @@ function renderRank(st){
 const dlg=$("#dlg");
 let cur=null;
 function openRate(rid){
-  const r=allR().find(x=>x.id===rid); if(!r) return;
+  let r=allR().find(x=>x.id===rid);
+  if(!r){ const v=Object.values(state.visits).find(x=>x&&x.rid===rid); if(!v) return; r={id:rid, n:v.nom||rid, v:v.ville||""}; }
   const qs=Q.filter(q=>q.notFor!==rid);
   cur={r, qs, i:0, ans:{aime:[],moins:[]}, date:new Date().toISOString().slice(0,10), paye:"", plat:"", com:""};
   drawStep(); dlg.showModal();
